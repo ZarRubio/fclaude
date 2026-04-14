@@ -6,7 +6,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/20 bg-[#f7f5ed]/85 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 border-b border-sahm-purple/20 bg-sahm-yellow/95 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <a href="#inicio" className="select-none text-3xl font-black italic tracking-tight text-sahm-purple">
           SAHM
@@ -17,7 +17,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="text-xs font-semibold uppercase tracking-[0.13em] text-slate-700 transition hover:text-sahm-purple"
+              className="text-xs font-semibold uppercase tracking-[0.13em] text-sahm-purple/90 transition hover:text-sahm-purple"
             >
               {link.label}
             </a>
@@ -46,7 +46,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-slate-200 bg-[#f7f5ed] px-6 pb-6 pt-4 lg:hidden">
+        <div className="border-t border-sahm-purple/20 bg-sahm-yellow px-6 pb-6 pt-4 lg:hidden">
           <div className="flex flex-col gap-4">
             {NAV_LINKS.map(link => (
               <a

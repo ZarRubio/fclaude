@@ -44,7 +44,7 @@ export default function Beneficios() {
             <article
               key={title}
               style={{ transitionDelay: `${i * 80}ms` }}
-              className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/40 transition hover:-translate-y-1"
+              className="group rounded-3xl border border-sahm-purple/15 bg-white p-6 shadow-lg shadow-sahm-purple/10 transition hover:-translate-y-1"
             >
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sahm-purple text-white shadow-lg shadow-sahm-purple/30">
                 <Icon />

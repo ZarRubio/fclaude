@@ -5,9 +5,11 @@
 @tailwind utilities;
 
 :root {
-  --bg-1: #faf8ef;
-  --bg-2: #f3f0e6;
-  --ink: #111122;
+  --sahm-yellow: #f5c000;
+  --sahm-purple: #3d2785;
+  --bg-1: #fff8d9;
+  --bg-2: #fdf2bf;
+  --ink: #1a1133;
 }
 
 * {
@@ -29,8 +31,8 @@ body {
   font-family: 'Barlow Condensed', sans-serif;
   color: var(--ink);
   background:
-    radial-gradient(circle at 12% 15%, rgba(61, 39, 133, 0.16), transparent 35%),
-    radial-gradient(circle at 88% 20%, rgba(245, 192, 0, 0.2), transparent 32%),
+    radial-gradient(circle at 12% 15%, rgba(61, 39, 133, 0.2), transparent 35%),
+    radial-gradient(circle at 88% 20%, rgba(245, 192, 0, 0.32), transparent 36%),
     linear-gradient(165deg, var(--bg-1), var(--bg-2));
 }
 

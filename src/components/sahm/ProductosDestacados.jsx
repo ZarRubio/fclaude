@@ -33,7 +33,7 @@ export default function ProductosDestacados() {
       ref={ref}
       className={`px-6 py-20 transition-all duration-700 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
     >
-      <div className="mx-auto max-w-7xl rounded-[2rem] border border-slate-200 bg-[#fffdf6] p-8 shadow-2xl shadow-slate-200/50 md:p-10">
+      <div className="mx-auto max-w-7xl rounded-[2rem] border border-sahm-purple/20 bg-[#fff9df] p-8 shadow-2xl shadow-sahm-purple/10 md:p-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">Productos destacados</p>
@@ -43,7 +43,7 @@ export default function ProductosDestacados() {
             href={buildWhatsAppMessageUrl('Hola, quiero recibir el catalogo completo de SAHM')}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center rounded-full bg-sahm-purple px-6 py-3 text-xs font-black uppercase tracking-[0.12em] text-white"
+            className="inline-flex items-center rounded-full bg-sahm-purple px-6 py-3 text-xs font-black uppercase tracking-[0.12em] text-white shadow-lg shadow-sahm-purple/30"
           >
             Solicitar catalogo
           </a>
@@ -78,7 +78,7 @@ function ProductoCard({ producto }) {
   )
 
   return (
-    <article className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-200/40 transition hover:-translate-y-1">
+    <article className="group overflow-hidden rounded-3xl border border-sahm-purple/15 bg-white shadow-lg shadow-sahm-purple/10 transition hover:-translate-y-1">
       <div className={`h-32 bg-gradient-to-r ${producto.color}`} />
       <div className="p-5">
         <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black uppercase tracking-[0.1em] text-slate-600">{producto.tag}</span>

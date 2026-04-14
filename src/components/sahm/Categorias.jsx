@@ -58,14 +58,14 @@ export default function Categorias() {
 
 function CategoriaCard({ cat }) {
   return (
-    <article className="group relative overflow-hidden rounded-[1.75rem] border border-white/40 bg-slate-900 shadow-2xl shadow-slate-300/30">
+    <article className="group relative overflow-hidden rounded-[1.75rem] border border-sahm-purple/20 bg-slate-900 shadow-2xl shadow-sahm-purple/20">
       <img src={cat.image} alt={cat.nombre} className="h-[360px] w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-sahm-purple/85 via-sahm-purple/30 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-6 text-white">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-yellow">Categoria</p>
         <h3 className="mt-2 text-3xl font-black">{cat.nombre}</h3>
         <p className="mt-2 max-w-sm text-sm text-white/80">{cat.descripcion}</p>
-        <a href={cat.href} className="mt-4 inline-flex items-center rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em]">
+        <a href={cat.href} className="mt-4 inline-flex items-center rounded-full bg-sahm-yellow px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-sahm-purple">
           Ver productos
         </a>
       </div>

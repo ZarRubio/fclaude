@@ -2,14 +2,40 @@
 import { useFadeIn } from '../../hooks/useFadeIn'
 import { buildWhatsAppMessageUrl } from '../../config/site'
 
-const PRODUCTOS = [
-  { id: 1, nombre: 'Llanta Sportmax', codigo: 'BT45F', tag: 'Urbano', color: 'from-orange-200 to-amber-100' },
-  { id: 2, nombre: 'Llanta Pilot Street', codigo: 'PS103', tag: 'Mixto', color: 'from-sky-200 to-cyan-100' },
-  { id: 3, nombre: 'Camara Universal 3.00', codigo: 'CM300', tag: 'Durable', color: 'from-violet-200 to-fuchsia-100' },
-  { id: 4, nombre: 'Kit de Frenos', codigo: 'KF2024', tag: 'Seguridad', color: 'from-rose-200 to-pink-100' },
-  { id: 5, nombre: 'Filtro de Aire Sport', codigo: 'FA150', tag: 'Rendimiento', color: 'from-emerald-200 to-lime-100' },
-  { id: 6, nombre: 'Aceite Motor 4T', codigo: 'AM20W50', tag: 'Mantenimiento', color: 'from-yellow-200 to-amber-100' },
-]
+const COPY = {
+  es: {
+    kicker: 'Productos destacados',
+    title: 'Listos para entrega',
+    catalogButton: 'Solicitar catalogo',
+    askAvailability: 'Consultar disponibilidad',
+    waCatalog: 'Hola, quiero recibir el catalogo completo de SAHM',
+    waProduct: 'Hola, deseo consultar disponibilidad del producto',
+    items: [
+      { id: 1, nombre: 'Llanta Sportmax', codigo: 'BT45F', tag: 'Urbano', color: 'from-orange-200 to-amber-100' },
+      { id: 2, nombre: 'Llanta Pilot Street', codigo: 'PS103', tag: 'Mixto', color: 'from-sky-200 to-cyan-100' },
+      { id: 3, nombre: 'Camara Universal 3.00', codigo: 'CM300', tag: 'Durable', color: 'from-violet-200 to-fuchsia-100' },
+      { id: 4, nombre: 'Kit de Frenos', codigo: 'KF2024', tag: 'Seguridad', color: 'from-rose-200 to-pink-100' },
+      { id: 5, nombre: 'Filtro de Aire Sport', codigo: 'FA150', tag: 'Rendimiento', color: 'from-emerald-200 to-lime-100' },
+      { id: 6, nombre: 'Aceite Motor 4T', codigo: 'AM20W50', tag: 'Mantenimiento', color: 'from-yellow-200 to-amber-100' },
+    ],
+  },
+  en: {
+    kicker: 'Featured products',
+    title: 'Ready to ship',
+    catalogButton: 'Request catalog',
+    askAvailability: 'Check availability',
+    waCatalog: 'Hi, I want the full SAHM catalog',
+    waProduct: 'Hi, I want to check availability for product',
+    items: [
+      { id: 1, nombre: 'Sportmax Tire', codigo: 'BT45F', tag: 'Urban', color: 'from-orange-200 to-amber-100' },
+      { id: 2, nombre: 'Pilot Street Tire', codigo: 'PS103', tag: 'Mixed', color: 'from-sky-200 to-cyan-100' },
+      { id: 3, nombre: 'Universal Tube 3.00', codigo: 'CM300', tag: 'Durable', color: 'from-violet-200 to-fuchsia-100' },
+      { id: 4, nombre: 'Brake Kit', codigo: 'KF2024', tag: 'Safety', color: 'from-rose-200 to-pink-100' },
+      { id: 5, nombre: 'Sport Air Filter', codigo: 'FA150', tag: 'Performance', color: 'from-emerald-200 to-lime-100' },
+      { id: 6, nombre: '4T Engine Oil', codigo: 'AM20W50', tag: 'Maintenance', color: 'from-yellow-200 to-amber-100' },
+    ],
+  },
+}
 
 const ITEMS_PER_VIEW = 3
 
@@ -21,11 +47,12 @@ function getVisible(items, start, count) {
   return result
 }
 
-export default function ProductosDestacados() {
+export default function ProductosDestacados({ lang }) {
   const [start, setStart] = useState(0)
   const [ref, visible] = useFadeIn()
-  const visibles = getVisible(PRODUCTOS, start, ITEMS_PER_VIEW)
-  const mobileItem = PRODUCTOS[start % PRODUCTOS.length]
+  const copy = COPY[lang]
+  const visibles = getVisible(copy.items, start, ITEMS_PER_VIEW)
+  const mobileItem = copy.items[start % copy.items.length]
 
   return (
     <section
@@ -36,35 +63,35 @@ export default function ProductosDestacados() {
       <div className="mx-auto max-w-7xl rounded-[2rem] border border-sahm-purple/20 bg-[#fff9df] p-8 shadow-2xl shadow-sahm-purple/10 md:p-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">Productos destacados</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-900 md:text-5xl">Listos para entrega</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">{copy.kicker}</p>
+            <h2 className="mt-2 text-3xl font-black text-slate-900 md:text-5xl">{copy.title}</h2>
           </div>
           <a
-            href={buildWhatsAppMessageUrl('Hola, quiero recibir el catalogo completo de SAHM')}
+            href={buildWhatsAppMessageUrl(copy.waCatalog)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center rounded-full bg-sahm-purple px-6 py-3 text-xs font-black uppercase tracking-[0.12em] text-white shadow-lg shadow-sahm-purple/30"
           >
-            Solicitar catalogo
+            {copy.catalogButton}
           </a>
         </div>
 
         <div className="hidden items-center gap-4 md:flex">
-          <NavBtn direction="left" onClick={() => setStart(s => (s - 1 + PRODUCTOS.length) % PRODUCTOS.length)} />
+          <NavBtn direction="left" onClick={() => setStart(s => (s - 1 + copy.items.length) % copy.items.length)} />
           <div className="grid flex-1 grid-cols-3 gap-5">
             {visibles.map(item => (
-              <ProductoCard key={`${item.id}-${start}`} producto={item} />
+              <ProductoCard key={`${item.id}-${start}`} producto={item} copy={copy} />
             ))}
           </div>
-          <NavBtn direction="right" onClick={() => setStart(s => (s + 1) % PRODUCTOS.length)} />
+          <NavBtn direction="right" onClick={() => setStart(s => (s + 1) % copy.items.length)} />
         </div>
 
         <div className="md:hidden">
-          <ProductoCard producto={mobileItem} />
+          <ProductoCard producto={mobileItem} copy={copy} />
           <div className="mt-5 flex items-center justify-center gap-4">
-            <NavBtn direction="left" onClick={() => setStart(s => (s - 1 + PRODUCTOS.length) % PRODUCTOS.length)} />
-            <span className="text-sm font-semibold text-slate-600">{(start % PRODUCTOS.length) + 1} / {PRODUCTOS.length}</span>
-            <NavBtn direction="right" onClick={() => setStart(s => (s + 1) % PRODUCTOS.length)} />
+            <NavBtn direction="left" onClick={() => setStart(s => (s - 1 + copy.items.length) % copy.items.length)} />
+            <span className="text-sm font-semibold text-slate-600">{(start % copy.items.length) + 1} / {copy.items.length}</span>
+            <NavBtn direction="right" onClick={() => setStart(s => (s + 1) % copy.items.length)} />
           </div>
         </div>
       </div>
@@ -72,9 +99,9 @@ export default function ProductosDestacados() {
   )
 }
 
-function ProductoCard({ producto }) {
+function ProductoCard({ producto, copy }) {
   const waUrl = buildWhatsAppMessageUrl(
-    `Hola, deseo consultar disponibilidad del producto ${producto.codigo} - ${producto.nombre}`
+    `${copy.waProduct} ${producto.codigo} - ${producto.nombre}`
   )
 
   return (
@@ -90,7 +117,7 @@ function ProductoCard({ producto }) {
           rel="noopener noreferrer"
           className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-sahm-yellow py-3 text-xs font-black uppercase tracking-[0.1em] text-slate-900"
         >
-          Consultar disponibilidad
+          {copy.askAvailability}
         </a>
       </div>
     </article>

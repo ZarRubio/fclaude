@@ -1,21 +1,39 @@
-﻿import { NAV_LINKS } from '../../config/navigation'
+﻿import { NAV_LINKS_BY_LANG } from '../../config/navigation'
 import { WHATSAPP_URL } from '../../config/site'
 
-export default function Footer() {
+const COPY = {
+  es: {
+    brandText: 'Soluciones en llantas y repuestos para motos. Atencion comercial agil y foco en continuidad para taller y flota.',
+    navigation: 'Navegacion',
+    contact: 'Contacto',
+    whatsapp: 'WhatsApp Comercial',
+    rights: '(c) 2026 SAHM. Todos los derechos reservados.',
+  },
+  en: {
+    brandText: 'Solutions in tires and spare parts for motorcycles. Agile commercial support and stock continuity for workshops and fleets.',
+    navigation: 'Navigation',
+    contact: 'Contact',
+    whatsapp: 'Commercial WhatsApp',
+    rights: '(c) 2026 SAHM. All rights reserved.',
+  },
+}
+
+export default function Footer({ lang }) {
+  const copy = COPY[lang]
+  const navLinks = NAV_LINKS_BY_LANG[lang]
+
   return (
     <footer id="contacto" className="mt-12 border-t border-slate-200 bg-[#16112a] text-slate-100">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-[1.3fr_1fr_1fr]">
         <div>
           <p className="text-4xl font-black italic tracking-tight text-sahm-yellow">SAHM</p>
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-300">
-            Soluciones en llantas y repuestos para motos. Atencion comercial agil y foco en continuidad para taller y flota.
-          </p>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-300">{copy.brandText}</p>
         </div>
 
         <div>
-          <h4 className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">Navegacion</h4>
+          <h4 className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">{copy.navigation}</h4>
           <ul className="mt-4 space-y-2">
-            {NAV_LINKS.map(link => (
+            {navLinks.map(link => (
               <li key={link.label}>
                 <a href={link.href} className="text-sm text-slate-200 transition hover:text-sahm-yellow">
                   {link.label}
@@ -26,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">Contacto</h4>
+          <h4 className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">{copy.contact}</h4>
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -34,13 +52,13 @@ export default function Footer() {
             className="mt-4 inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-slate-100 transition hover:bg-white/10"
           >
             <WhatsAppIcon />
-            WhatsApp Comercial
+            {copy.whatsapp}
           </a>
         </div>
       </div>
 
       <div className="border-t border-white/10 px-6 py-5 text-center text-xs text-slate-400">
-        <p>(c) 2026 SAHM. Todos los derechos reservados.</p>
+        <p>{copy.rights}</p>
       </div>
     </footer>
   )

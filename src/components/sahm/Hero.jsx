@@ -4,11 +4,42 @@ import { WHATSAPP_URL, buildWhatsAppMessageUrl } from '../../config/site'
 
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1600&q=80'
 
-const STATS = [
-  { target: 500, suffix: '+', label: 'Clientes atendidos', duration: 1400 },
-  { target: 48, suffix: 'h', label: 'Entrega nacional', duration: 1100 },
-  { target: 98, suffix: '%', label: 'Recompra', duration: 1500 },
-]
+const COPY = {
+  es: {
+    badge: 'Distribucion oficial para moto y taller',
+    titleA: 'Repuestos confiables,',
+    titleB: 'ruta asegurada.',
+    desc: 'Llantas, camaras y repuestos con respaldo. Te asesoramos por WhatsApp y despachamos a todo el pais con tiempos reales.',
+    ctaPrimary: 'Cotizar ahora',
+    ctaSecondary: 'Ver catalogo',
+    fastReply: 'Respuesta rapida',
+    advisor: 'Hablar con asesor',
+    stats: [
+      { target: 500, suffix: '+', label: 'Clientes atendidos', duration: 1400 },
+      { target: 48, suffix: 'h', label: 'Entrega nacional', duration: 1100 },
+      { target: 98, suffix: '%', label: 'Recompra', duration: 1500 },
+    ],
+    waQuote: 'Hola, quiero una cotizacion completa para mi moto',
+    alt: 'Moto en ruta con repuestos de calidad',
+  },
+  en: {
+    badge: 'Official distributor for riders and workshops',
+    titleA: 'Trusted parts,',
+    titleB: 'smooth rides ahead.',
+    desc: 'Tires, tubes and spare parts with full support. We assist you on WhatsApp and ship nationwide with real delivery timelines.',
+    ctaPrimary: 'Get a quote',
+    ctaSecondary: 'Browse catalog',
+    fastReply: 'Fast reply',
+    advisor: 'Talk to an advisor',
+    stats: [
+      { target: 500, suffix: '+', label: 'Customers served', duration: 1400 },
+      { target: 48, suffix: 'h', label: 'Nationwide delivery', duration: 1100 },
+      { target: 98, suffix: '%', label: 'Repeat purchase', duration: 1500 },
+    ],
+    waQuote: 'Hi, I want a full quote for my motorcycle',
+    alt: 'Motorcycle on the road with quality spare parts',
+  },
+}
 
 function useCountUp(target, duration, active) {
   const [count, setCount] = useState(0)
@@ -29,8 +60,9 @@ function useCountUp(target, duration, active) {
   return count
 }
 
-export default function Hero() {
+export default function Hero({ lang }) {
   const [ref, visible] = useFadeIn(0.2)
+  const copy = COPY[lang]
 
   return (
     <section id="inicio" ref={ref} className="relative overflow-hidden px-6 pb-20 pt-14 sm:pt-20">
@@ -40,35 +72,33 @@ export default function Hero() {
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
         <div className={`transition-all duration-700 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}`}>
           <p className="mb-5 inline-flex items-center rounded-full border border-sahm-purple/20 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-sahm-purple shadow-sm">
-            Distribucion oficial para moto y taller
+            {copy.badge}
           </p>
           <h1 className="text-4xl font-black leading-[0.95] text-slate-900 sm:text-5xl lg:text-7xl">
-            Repuestos confiables,
-            <span className="block text-sahm-purple">ruta asegurada.</span>
+            {copy.titleA}
+            <span className="block text-sahm-purple">{copy.titleB}</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-slate-600">
-            Llantas, camaras y repuestos con respaldo. Te asesoramos por WhatsApp y despachamos a todo el pais con tiempos reales.
-          </p>
+          <p className="mt-6 max-w-xl text-lg text-slate-600">{copy.desc}</p>
 
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href={buildWhatsAppMessageUrl('Hola, quiero una cotizacion completa para mi moto')}
+              href={buildWhatsAppMessageUrl(copy.waQuote)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-sahm-purple px-7 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white shadow-xl shadow-sahm-purple/30 transition hover:-translate-y-0.5"
             >
-              Cotizar ahora
+              {copy.ctaPrimary}
             </a>
             <a
               href="#productos"
               className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-3 text-sm font-bold uppercase tracking-[0.08em] text-slate-700 transition hover:border-slate-400"
             >
-              Ver catalogo
+              {copy.ctaSecondary}
             </a>
           </div>
 
           <div className="mt-10 grid grid-cols-3 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg shadow-slate-200/50">
-            {STATS.map(stat => (
+            {copy.stats.map(stat => (
               <StatCard key={stat.label} stat={stat} active={visible} />
             ))}
           </div>
@@ -76,13 +106,13 @@ export default function Hero() {
 
         <div className={`relative transition-all delay-100 duration-700 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
           <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-white/70 bg-white/90 p-4 shadow-xl lg:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.13em] text-slate-500">Respuesta rapida</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.13em] text-slate-500">{copy.fastReply}</p>
             <p className="text-2xl font-black text-sahm-purple">8 min</p>
           </div>
           <div className="overflow-hidden rounded-[2rem] border border-white/60 bg-white p-3 shadow-2xl shadow-sahm-purple/20">
             <img
               src={HERO_IMAGE}
-              alt="Moto en ruta con repuestos de calidad"
+              alt={copy.alt}
               className="h-[500px] w-full rounded-[1.4rem] object-cover"
               loading="eager"
             />
@@ -92,7 +122,7 @@ export default function Hero() {
               rel="noopener noreferrer"
               className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-sahm-yellow py-3 text-sm font-black uppercase tracking-[0.1em] text-slate-900"
             >
-              Hablar con asesor
+              {copy.advisor}
             </a>
           </div>
         </div>

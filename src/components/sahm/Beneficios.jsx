@@ -1,30 +1,31 @@
 ﻿import { useFadeIn } from '../../hooks/useFadeIn'
 
-const BENEFICIOS = [
-  {
-    title: 'Asesoria tecnica real',
-    subtitle: 'Compatibilidad por modelo y uso.',
-    Icon: HeadsetIcon,
+const COPY = {
+  es: {
+    kicker: 'Por que elegir SAHM',
+    title: 'Servicio pensado para taller y calle',
+    items: [
+      { title: 'Asesoria tecnica real', subtitle: 'Compatibilidad por modelo y uso.' },
+      { title: 'Stock actualizado', subtitle: 'Disponibilidad con confirmacion inmediata.' },
+      { title: 'Cobertura nacional', subtitle: 'Despachos a taller, negocio o domicilio.' },
+      { title: 'Respaldo postventa', subtitle: 'Seguimiento y soporte despues de la compra.' },
+    ],
   },
-  {
-    title: 'Stock actualizado',
-    subtitle: 'Disponibilidad con confirmacion inmediata.',
-    Icon: WarehouseIcon,
+  en: {
+    kicker: 'Why SAHM',
+    title: 'Service built for workshops and riders',
+    items: [
+      { title: 'Real technical guidance', subtitle: 'Compatibility checks by model and usage.' },
+      { title: 'Updated stock', subtitle: 'Availability confirmation in real time.' },
+      { title: 'Nationwide coverage', subtitle: 'Delivery to workshop, business, or home.' },
+      { title: 'After-sales support', subtitle: 'Follow-up and support after purchase.' },
+    ],
   },
-  {
-    title: 'Cobertura nacional',
-    subtitle: 'Despachos a taller, negocio o domicilio.',
-    Icon: TruckIcon,
-  },
-  {
-    title: 'Respaldo postventa',
-    subtitle: 'Seguimiento y soporte despues de la compra.',
-    Icon: ShieldCheckIcon,
-  },
-]
+}
 
-export default function Beneficios() {
+export default function Beneficios({ lang }) {
   const [ref, visible] = useFadeIn()
+  const copy = COPY[lang]
 
   return (
     <section
@@ -34,20 +35,23 @@ export default function Beneficios() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex items-end justify-between gap-6">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">Por que elegir SAHM</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-900 md:text-4xl">Servicio pensado para taller y calle</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">{copy.kicker}</p>
+            <h2 className="mt-2 text-3xl font-black text-slate-900 md:text-4xl">{copy.title}</h2>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {BENEFICIOS.map(({ title, subtitle, Icon }, i) => (
+          {copy.items.map(({ title, subtitle }, i) => (
             <article
               key={title}
               style={{ transitionDelay: `${i * 80}ms` }}
               className="group rounded-3xl border border-sahm-purple/15 bg-white p-6 shadow-lg shadow-sahm-purple/10 transition hover:-translate-y-1"
             >
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sahm-purple text-white shadow-lg shadow-sahm-purple/30">
-                <Icon />
+                {i === 0 && <HeadsetIcon />}
+                {i === 1 && <WarehouseIcon />}
+                {i === 2 && <TruckIcon />}
+                {i === 3 && <ShieldCheckIcon />}
               </div>
               <h3 className="text-xl font-black text-slate-900">{title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">{subtitle}</p>

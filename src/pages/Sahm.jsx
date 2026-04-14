@@ -1,4 +1,5 @@
-﻿import Navbar from '../components/sahm/Navbar'
+﻿import { useEffect, useState } from 'react'
+import Navbar from '../components/sahm/Navbar'
 import Hero from '../components/sahm/Hero'
 import Beneficios from '../components/sahm/Beneficios'
 import Confianza from '../components/sahm/Confianza'
@@ -6,16 +7,25 @@ import Categorias from '../components/sahm/Categorias'
 import ProductosDestacados from '../components/sahm/ProductosDestacados'
 import Footer from '../components/sahm/Footer'
 
+const LANGUAGE_STORAGE_KEY = 'sahm_lang'
+
 export default function Sahm() {
+  const [lang, setLang] = useState(() => localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'es')
+
+  useEffect(() => {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, lang)
+    document.documentElement.lang = lang
+  }, [lang])
+
   return (
     <div className="min-h-screen font-sans antialiased text-slate-900">
-      <Navbar />
-      <Hero />
-      <Beneficios />
-      <Confianza />
-      <Categorias />
-      <ProductosDestacados />
-      <Footer />
+      <Navbar lang={lang} setLang={setLang} />
+      <Hero lang={lang} />
+      <Beneficios lang={lang} />
+      <Confianza lang={lang} />
+      <Categorias lang={lang} />
+      <ProductosDestacados lang={lang} />
+      <Footer lang={lang} />
     </div>
   )
 }

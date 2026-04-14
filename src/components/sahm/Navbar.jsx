@@ -1,9 +1,26 @@
 ﻿import { useState } from 'react'
-import { NAV_LINKS } from '../../config/navigation'
+import { NAV_LINKS_BY_LANG } from '../../config/navigation'
 import { WHATSAPP_URL } from '../../config/site'
 
-export default function Navbar() {
+const UI_TEXT = {
+  es: {
+    quote: 'Cotizar',
+    quoteWhatsapp: 'Cotizar por WhatsApp',
+    menuLabel: 'Menu',
+    langLabel: 'Idioma',
+  },
+  en: {
+    quote: 'Get quote',
+    quoteWhatsapp: 'Quote on WhatsApp',
+    menuLabel: 'Menu',
+    langLabel: 'Language',
+  },
+}
+
+export default function Navbar({ lang, setLang }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const navLinks = NAV_LINKS_BY_LANG[lang]
+  const text = UI_TEXT[lang]
 
   return (
     <nav className="sticky top-0 z-50 border-b border-sahm-purple/20 bg-sahm-yellow/95 backdrop-blur-xl">
@@ -13,7 +30,7 @@ export default function Navbar() {
         </a>
 
         <div className="hidden items-center gap-6 lg:flex">
-          {NAV_LINKS.map(link => (
+          {navLinks.map(link => (
             <a
               key={link.label}
               href={link.href}
@@ -24,7 +41,8 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-2 lg:flex">
+          <LanguageSwitch lang={lang} setLang={setLang} label={text.langLabel} compact />
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -32,14 +50,14 @@ export default function Navbar() {
             className="inline-flex items-center gap-2 rounded-full bg-sahm-purple px-4 py-2 text-sm font-bold text-white shadow-lg shadow-sahm-purple/30 transition hover:-translate-y-0.5 hover:opacity-95"
           >
             <WhatsAppIcon />
-            Cotizar
+            {text.quote}
           </a>
         </div>
 
         <button
           className="rounded-md p-1 text-slate-700 lg:hidden"
           onClick={() => setMenuOpen(o => !o)}
-          aria-label="Menu"
+          aria-label={text.menuLabel}
         >
           {menuOpen ? <XIcon /> : <MenuIcon />}
         </button>
@@ -48,7 +66,8 @@ export default function Navbar() {
       {menuOpen && (
         <div className="border-t border-sahm-purple/20 bg-sahm-yellow px-6 pb-6 pt-4 lg:hidden">
           <div className="flex flex-col gap-4">
-            {NAV_LINKS.map(link => (
+            <LanguageSwitch lang={lang} setLang={setLang} label={text.langLabel} />
+            {navLinks.map(link => (
               <a
                 key={link.label}
                 href={link.href}
@@ -65,12 +84,34 @@ export default function Navbar() {
               className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-sahm-purple px-5 py-2 text-sm font-bold text-white"
             >
               <WhatsAppIcon />
-              Cotizar por WhatsApp
+              {text.quoteWhatsapp}
             </a>
           </div>
         </div>
       )}
     </nav>
+  )
+}
+
+function LanguageSwitch({ lang, setLang, label, compact = false }) {
+  return (
+    <div className={`inline-flex items-center rounded-full border border-sahm-purple/20 bg-white/90 p-1 ${compact ? '' : 'w-fit'}`}>
+      <span className="px-2 text-[11px] font-bold uppercase tracking-[0.12em] text-sahm-purple/70">{label}</span>
+      <button
+        type="button"
+        onClick={() => setLang('es')}
+        className={`rounded-full px-3 py-1 text-xs font-black uppercase tracking-[0.1em] transition ${lang === 'es' ? 'bg-sahm-purple text-white' : 'text-sahm-purple/80 hover:bg-sahm-purple/10'}`}
+      >
+        ES
+      </button>
+      <button
+        type="button"
+        onClick={() => setLang('en')}
+        className={`rounded-full px-3 py-1 text-xs font-black uppercase tracking-[0.1em] transition ${lang === 'en' ? 'bg-sahm-purple text-white' : 'text-sahm-purple/80 hover:bg-sahm-purple/10'}`}
+      >
+        EN
+      </button>
+    </div>
   )
 }
 

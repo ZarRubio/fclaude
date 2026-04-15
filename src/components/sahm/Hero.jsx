@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFadeIn } from '../../hooks/useFadeIn'
 import { WHATSAPP_URL, buildWhatsAppMessageUrl } from '../../config/site'
 
@@ -9,11 +9,18 @@ const COPY = {
     badge: 'Distribucion oficial para moto y taller',
     titleA: 'Repuestos confiables,',
     titleB: 'ruta asegurada.',
-    desc: 'Llantas, camaras y repuestos con respaldo. Te asesoramos por WhatsApp y despachamos a todo el pais con tiempos reales.',
+    desc: 'Llantas, camaras y repuestos con respaldo. Te asesoramos por WhatsApp, validamos compatibilidad y despachamos a todo el pais con tiempos reales.',
     ctaPrimary: 'Cotizar ahora',
     ctaSecondary: 'Ver catalogo',
+    features: ['Compatibilidad validada', 'Despacho nacional', 'Atencion para taller y flota'],
     fastReply: 'Respuesta rapida',
     advisor: 'Hablar con asesor',
+    supportTitle: 'Cobertura nacional',
+    supportText: 'Atendemos pedidos para ciudad, ruta y negocio con seguimiento real y coordinacion comercial.',
+    supportMeta: '12 marcas activas',
+    serviceTitle: 'Asesoria tecnica',
+    serviceText: 'Te ayudamos a elegir antes de comprar, sin adivinar medidas ni compatibilidades.',
+    serviceMeta: 'Respuesta en 8 min',
     stats: [
       { target: 500, suffix: '+', label: 'Clientes atendidos', duration: 1400 },
       { target: 48, suffix: 'h', label: 'Entrega nacional', duration: 1100 },
@@ -26,11 +33,18 @@ const COPY = {
     badge: 'Official distributor for riders and workshops',
     titleA: 'Trusted parts,',
     titleB: 'smooth rides ahead.',
-    desc: 'Tires, tubes and spare parts with full support. We assist you on WhatsApp and ship nationwide with real delivery timelines.',
+    desc: 'Tires, tubes and spare parts with full support. We assist you on WhatsApp, validate fitment and ship nationwide with real delivery timelines.',
     ctaPrimary: 'Get a quote',
     ctaSecondary: 'Browse catalog',
+    features: ['Fitment checked', 'Nationwide shipping', 'Workshop and fleet service'],
     fastReply: 'Fast reply',
     advisor: 'Talk to an advisor',
+    supportTitle: 'Nationwide coverage',
+    supportText: 'We support city, highway and business orders with real tracking and commercial coordination.',
+    supportMeta: '12 active brands',
+    serviceTitle: 'Technical guidance',
+    serviceText: 'We help you choose the right option before checkout, not after a wrong order.',
+    serviceMeta: 'Reply in 8 min',
     stats: [
       { target: 500, suffix: '+', label: 'Customers served', duration: 1400 },
       { target: 48, suffix: 'h', label: 'Nationwide delivery', duration: 1100 },
@@ -65,11 +79,12 @@ export default function Hero({ lang }) {
   const copy = COPY[lang]
 
   return (
-    <section id="inicio" ref={ref} className="relative overflow-hidden px-6 pb-20 pt-14 sm:pt-20">
+    <section id="inicio" ref={ref} className="relative overflow-hidden px-6 pb-20 pt-14 sm:pt-20 lg:pb-24">
       <div className="ambient-glow absolute -left-32 top-6 h-72 w-72" />
       <div className="ambient-glow absolute -right-24 top-20 h-80 w-80" />
+      <div className="soft-grid absolute inset-0 opacity-40" />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div className={`transition-all duration-700 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}`}>
           <p className="mb-5 inline-flex items-center rounded-full border border-sahm-purple/20 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-sahm-purple shadow-sm">
             {copy.badge}
@@ -97,6 +112,17 @@ export default function Hero({ lang }) {
             </a>
           </div>
 
+          <div className="mt-6 flex flex-wrap gap-3">
+            {copy.features.map(feature => (
+              <span
+                key={feature}
+                className="rounded-full border border-sahm-purple/10 bg-white/90 px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-slate-700 shadow-sm"
+              >
+                {feature}
+              </span>
+            ))}
+          </div>
+
           <div className="mt-10 grid grid-cols-3 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg shadow-slate-200/50">
             {copy.stats.map(stat => (
               <StatCard key={stat.label} stat={stat} active={visible} />
@@ -109,11 +135,12 @@ export default function Hero({ lang }) {
             <p className="text-xs font-semibold uppercase tracking-[0.13em] text-slate-500">{copy.fastReply}</p>
             <p className="text-2xl font-black text-sahm-purple">8 min</p>
           </div>
-          <div className="overflow-hidden rounded-[2rem] border border-white/60 bg-white p-3 shadow-2xl shadow-sahm-purple/20">
+
+          <div className="overflow-hidden rounded-[2rem] border border-white/60 bg-white p-3 shadow-2xl shadow-sahm-purple/20 float-slow">
             <img
               src={HERO_IMAGE}
               alt={copy.alt}
-              className="h-[500px] w-full rounded-[1.4rem] object-cover"
+              className="h-[420px] w-full rounded-[1.4rem] object-cover sm:h-[500px]"
               loading="eager"
             />
             <a
@@ -124,6 +151,21 @@ export default function Hero({ lang }) {
             >
               {copy.advisor}
             </a>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <DetailCard
+              tone="light"
+              title={copy.supportTitle}
+              text={copy.supportText}
+              meta={copy.supportMeta}
+            />
+            <DetailCard
+              tone="dark"
+              title={copy.serviceTitle}
+              text={copy.serviceText}
+              meta={copy.serviceMeta}
+            />
           </div>
         </div>
       </div>
@@ -141,6 +183,24 @@ function StatCard({ stat, active }) {
         {stat.suffix}
       </p>
       <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">{stat.label}</p>
+    </article>
+  )
+}
+
+function DetailCard({ tone, title, text, meta }) {
+  const cardClass =
+    tone === 'dark'
+      ? 'border-sahm-purple/20 bg-sahm-purple text-white shadow-sahm-purple/20'
+      : 'border-sahm-purple/15 bg-white/95 text-slate-900 shadow-sahm-purple/10'
+
+  const metaClass = tone === 'dark' ? 'text-white/70' : 'text-slate-500'
+  const titleClass = tone === 'dark' ? 'text-sahm-yellow' : 'text-sahm-purple'
+
+  return (
+    <article className={`rounded-[1.5rem] border p-5 shadow-lg ${cardClass}`}>
+      <p className={`text-xs font-black uppercase tracking-[0.14em] ${titleClass}`}>{title}</p>
+      <p className="mt-2 text-base font-bold leading-snug">{text}</p>
+      <p className={`mt-3 text-sm font-semibold ${metaClass}`}>{meta}</p>
     </article>
   )
 }

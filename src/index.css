@@ -34,6 +34,7 @@ body {
     radial-gradient(circle at 12% 15%, rgba(61, 39, 133, 0.2), transparent 35%),
     radial-gradient(circle at 88% 20%, rgba(245, 192, 0, 0.32), transparent 36%),
     linear-gradient(165deg, var(--bg-1), var(--bg-2));
+  background-attachment: fixed;
 }
 
 ::selection {
@@ -45,4 +46,38 @@ body {
   background: radial-gradient(circle, rgba(61, 39, 133, 0.25), rgba(61, 39, 133, 0));
   filter: blur(14px);
   pointer-events: none;
+}
+
+.soft-grid {
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(61, 39, 133, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61, 39, 133, 0.05) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(circle at center, black 45%, transparent 88%);
+}
+
+.float-slow {
+  animation: float-slow 7.5s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .float-slow {
+    animation: none;
+  }
 }

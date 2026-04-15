@@ -1,24 +1,62 @@
-﻿import { useFadeIn } from '../../hooks/useFadeIn'
+import { useFadeIn } from '../../hooks/useFadeIn'
 
 const COPY = {
   es: {
     kicker: 'Por que elegir SAHM',
-    title: 'Servicio pensado para taller y calle',
+    introTitle: 'Una experiencia comercial pensada para resolver rapido y vender con confianza.',
+    introText:
+      'Nos enfocamos en que encuentres la pieza correcta, con stock claro y acompanamiento real desde la consulta hasta la entrega.',
+    chips: ['Asesoria por modelo', 'Despacho coordinado', 'Atencion para taller y flota'],
     items: [
-      { title: 'Asesoria tecnica real', subtitle: 'Compatibilidad por modelo y uso.' },
-      { title: 'Stock actualizado', subtitle: 'Disponibilidad con confirmacion inmediata.' },
-      { title: 'Cobertura nacional', subtitle: 'Despachos a taller, negocio o domicilio.' },
-      { title: 'Respaldo postventa', subtitle: 'Seguimiento y soporte despues de la compra.' },
+      {
+        title: 'Compatibilidad sin errores',
+        subtitle: 'Validamos medidas, aro y uso antes de cotizar para evitar compras equivocadas.',
+        icon: 'fit',
+      },
+      {
+        title: 'Stock con respuesta real',
+        subtitle: 'Te confirmamos disponibilidad y tiempos antes del pago, sin promesas vacias.',
+        icon: 'stock',
+      },
+      {
+        title: 'Cobertura nacional',
+        subtitle: 'Despachamos a domicilio, negocio o taller con seguimiento comercial durante el envio.',
+        icon: 'route',
+      },
+      {
+        title: 'Postventa que responde',
+        subtitle: 'Acompaniamos dudas, reposiciones y nuevas compras para que sigas operando sin friccion.',
+        icon: 'shield',
+      },
     ],
   },
   en: {
     kicker: 'Why SAHM',
-    title: 'Service built for workshops and riders',
+    introTitle: 'A commercial experience built to move fast and help you buy with confidence.',
+    introText:
+      'We focus on helping you choose the right part, with clear stock and real support from first message to final delivery.',
+    chips: ['Model-based guidance', 'Coordinated shipping', 'Workshop and fleet support'],
     items: [
-      { title: 'Real technical guidance', subtitle: 'Compatibility checks by model and usage.' },
-      { title: 'Updated stock', subtitle: 'Availability confirmation in real time.' },
-      { title: 'Nationwide coverage', subtitle: 'Delivery to workshop, business, or home.' },
-      { title: 'After-sales support', subtitle: 'Follow-up and support after purchase.' },
+      {
+        title: 'Fitment without mistakes',
+        subtitle: 'We validate size, rim and use case before quoting so you do not order the wrong part.',
+        icon: 'fit',
+      },
+      {
+        title: 'Real stock response',
+        subtitle: 'We confirm availability and timing before payment, not after checkout.',
+        icon: 'stock',
+      },
+      {
+        title: 'Nationwide coverage',
+        subtitle: 'We ship to home, business or workshop with commercial follow-up during delivery.',
+        icon: 'route',
+      },
+      {
+        title: 'After-sales that answers',
+        subtitle: 'We support follow-up questions, replacements and repeat purchases so you keep moving.',
+        icon: 'shield',
+      },
     ],
   },
 }
@@ -33,41 +71,62 @@ export default function Beneficios({ lang }) {
       className={`px-6 py-16 transition-all duration-700 ease-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">{copy.kicker}</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-900 md:text-4xl">{copy.title}</h2>
-          </div>
-        </div>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple">{copy.kicker}</p>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {copy.items.map(({ title, subtitle }, i) => (
-            <article
-              key={title}
-              style={{ transitionDelay: `${i * 80}ms` }}
-              className="group rounded-3xl border border-sahm-purple/15 bg-white p-6 shadow-lg shadow-sahm-purple/10 transition hover:-translate-y-1"
-            >
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sahm-purple text-white shadow-lg shadow-sahm-purple/30">
-                {i === 0 && <HeadsetIcon />}
-                {i === 1 && <WarehouseIcon />}
-                {i === 2 && <TruckIcon />}
-                {i === 3 && <ShieldCheckIcon />}
+        <div className="mt-4 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+          <article className="relative overflow-hidden rounded-[2rem] border border-sahm-purple/20 bg-sahm-purple p-8 text-white shadow-2xl shadow-sahm-purple/20 sm:p-10">
+            <div className="soft-grid absolute inset-0 opacity-20" />
+            <div className="relative">
+              <h2 className="max-w-xl text-3xl font-black leading-tight sm:text-4xl">{copy.introTitle}</h2>
+              <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">{copy.introText}</p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {copy.chips.map(chip => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-sahm-yellow"
+                  >
+                    {chip}
+                  </span>
+                ))}
               </div>
-              <h3 className="text-xl font-black text-slate-900">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{subtitle}</p>
-            </article>
-          ))}
+            </div>
+          </article>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            {copy.items.map((item, index) => (
+              <article
+                key={item.title}
+                style={{ transitionDelay: `${index * 70}ms` }}
+                className="group rounded-[1.75rem] border border-sahm-purple/15 bg-white p-6 shadow-lg shadow-sahm-purple/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sahm-purple/15"
+              >
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sahm-yellow text-sahm-purple shadow-lg shadow-sahm-yellow/30 transition duration-300 group-hover:scale-105">
+                  <Icon type={item.icon} />
+                </div>
+                <h3 className="text-xl font-black text-slate-900">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.subtitle}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   )
 }
 
-function HeadsetIcon() {
+function Icon({ type }) {
+  if (type === 'fit') return <TargetIcon />
+  if (type === 'stock') return <WarehouseIcon />
+  if (type === 'route') return <RouteIcon />
+  return <ShieldCheckIcon />
+}
+
+function TargetIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12a9 9 0 0118 0v6h-3v-6a6 6 0 00-12 0v6H3v-6z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 18a3 3 0 01-3 3h-3" />
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="3" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v3M12 19v3M2 12h3M19 12h3" />
     </svg>
   )
 }
@@ -81,12 +140,11 @@ function WarehouseIcon() {
   )
 }
 
-function TruckIcon() {
+function RouteIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M1 3h15v13H1zM16 8h4l3 3v5h-7z" />
-      <circle cx="5.5" cy="18.5" r="2.5" />
-      <circle cx="18.5" cy="18.5" r="2.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 17a3 3 0 110-6c.34 0 .66.06.96.18A5 5 0 0116 9a4 4 0 011.18 7.82" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 17h8M14 13l4 4-4 4" />
     </svg>
   )
 }

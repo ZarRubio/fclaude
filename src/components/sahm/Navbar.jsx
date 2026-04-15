@@ -55,6 +55,7 @@ export default function Navbar({ lang, setLang }) {
         </div>
 
         <button
+          type="button"
           className="rounded-md p-1 text-slate-700 lg:hidden"
           onClick={() => setMenuOpen(o => !o)}
           aria-label={text.menuLabel}

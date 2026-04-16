@@ -6,6 +6,11 @@ const cleanNumber = String(envNumber).replace(/\D/g, '')
 export const WHATSAPP_NUMBER = cleanNumber || FALLBACK_WHATSAPP_NUMBER
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`
 
+export const FEATURE_FLAGS = {
+  catalogReady: false,
+  socialReady: false,
+}
+
 export function buildWhatsAppMessageUrl(message) {
   return `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`
 }

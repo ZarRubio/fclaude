@@ -10,6 +10,11 @@ export function useFadeIn(threshold = 0.15) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setVisible(true)
+      return undefined
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -17,7 +22,7 @@ export function useFadeIn(threshold = 0.15) {
           observer.disconnect()
         }
       },
-      { threshold }
+      { threshold, rootMargin: '0px 0px -8% 0px' }
     )
     const el = ref.current
     if (el) observer.observe(el)

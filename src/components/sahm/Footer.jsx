@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { NAV_LINKS_BY_LANG } from '../../config/navigation'
-import { WHATSAPP_URL, buildWhatsAppMessageUrl } from '../../config/site'
+import { FEATURE_FLAGS, WHATSAPP_URL, buildWhatsAppMessageUrl } from '../../config/site'
 import { WhatsAppIcon } from './icons'
+import ComingSoonModal from './ComingSoonModal'
 
 // ─── Business info ───────────────────────────────────────────────────────────
 // Replace these values with real data before going live.
@@ -27,35 +29,35 @@ const BUSINESS = {
 const COPY = {
   es: {
     bannerKicker: '¿Ya sabes lo que necesitas?',
-    bannerTitle: 'No pierdas más tiempo buscando. Te cotizamos ahora.',
+    bannerTitle: 'Escríbenos ahora. Te cotizamos en minutos.',
     bannerText:
-      'Escríbenos con el modelo de tu moto o el código del repuesto y te respondemos en minutos con stock real y opciones claras.',
+      'Dinos el modelo de tu moto o el código del repuesto y te respondemos con stock real, precio confirmado y opciones claras para decidir sin perder tiempo.',
     bannerPrimary: 'Cotizar por WhatsApp',
     bannerSecondary: 'Ver productos',
-    bannerMessage: 'Hola, quiero cotizar repuestos para mi moto',
+    bannerMessage: 'Hola, quiero cotizar repuestos para mi moto. Mi modelo es: ',
     brandText:
-      'Distribucion comercial de llantas, camaras y repuestos para moto. Atendemos compradores directos, talleres y flotas en todo el Peru.',
-    navigation: 'Navegacion',
-    services: 'Lineas de producto',
+      'Distribución comercial de llantas, cámaras y repuestos para moto. Atendemos compradores directos, talleres y flotas en todo el Perú.',
+    navigation: 'Navegación',
+    services: 'Líneas de producto',
     contact: 'Contacto',
-    hoursLabel: 'Horario de atencion',
-    addressLabel: 'Ubicacion',
+    hoursLabel: 'Horario de atención',
+    addressLabel: 'Ubicación',
     emailLabel: 'Email',
     paymentLabel: 'Medios de pago',
-    socialLabel: 'Siguenos',
+    socialLabel: 'Síguenos',
     backToTop: 'Volver arriba',
     rights: '2026 SAHM. Todos los derechos reservados.',
-    serviceItems: ['Llantas', 'Camaras', 'Frenos y control', 'Mantenimiento'],
-    badges: ['Despacho nacional', 'Stock confirmado', 'Atencion bilingue'],
+    serviceItems: ['Llantas', 'Cámaras', 'Frenos y control', 'Mantenimiento'],
+    badges: ['Despacho nacional', 'Stock confirmado', 'Atención bilingüe'],
   },
   en: {
     bannerKicker: 'Already know what you need?',
-    bannerTitle: 'Stop searching. We will quote you right now.',
+    bannerTitle: 'Write to us now. We quote you in minutes.',
     bannerText:
-      'Send us your motorcycle model or part code and we will reply in minutes with real stock and clear options.',
+      'Send us your motorcycle model or part code and we will reply with real stock, confirmed pricing and clear options so you can decide without wasting time.',
     bannerPrimary: 'Quote on WhatsApp',
     bannerSecondary: 'Browse products',
-    bannerMessage: 'Hi, I want to get a quote for spare parts for my motorcycle',
+    bannerMessage: 'Hi, I want to get a quote for spare parts for my motorcycle. My model is: ',
     brandText:
       'Commercial distribution of motorcycle tires, tubes and spare parts. We serve direct buyers, workshops and fleets across Peru.',
     navigation: 'Navigation',
@@ -74,6 +76,7 @@ const COPY = {
 }
 
 export default function Footer({ lang }) {
+  const [showSocialSoon, setShowSocialSoon] = useState(false)
   const copy = COPY[lang]
   const navLinks = NAV_LINKS_BY_LANG[lang]
   const hours = BUSINESS.hours[lang]
@@ -81,7 +84,7 @@ export default function Footer({ lang }) {
 
   return (
     <footer id="contacto" className="mt-12 bg-[#140f27] text-slate-100">
-      <div className="mx-auto max-w-7xl px-6 pb-8 pt-12">
+      <div className="mx-auto max-w-7xl px-4 pb-8 pt-12 sm:px-6">
 
         {/* ── Closing CTA banner ── */}
         <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-sahm-purple p-8 shadow-2xl shadow-sahm-purple/25 sm:p-10">
@@ -97,7 +100,7 @@ export default function Footer({ lang }) {
                 href={buildWhatsAppMessageUrl(copy.bannerMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-sahm-yellow px-7 py-3 text-sm font-black uppercase tracking-[0.1em] text-slate-900 transition hover:-translate-y-0.5"
+                className="btn-shimmer inline-flex w-full items-center justify-center gap-2 rounded-full bg-sahm-yellow px-7 py-3 text-sm font-black uppercase tracking-[0.1em] text-slate-900 transition hover:-translate-y-0.5 sm:w-auto"
               >
                 <WhatsAppIcon />
                 {copy.bannerPrimary}
@@ -127,18 +130,27 @@ export default function Footer({ lang }) {
             </div>
             {/* Social links */}
             <div className="mt-5 flex items-center gap-3">
-              <a href={BUSINESS.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:border-sahm-yellow hover:text-sahm-yellow">
-                <InstagramIcon />
-              </a>
-              <a href={BUSINESS.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:border-sahm-yellow hover:text-sahm-yellow">
-                <FacebookIcon />
-              </a>
-              <a href={BUSINESS.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:border-sahm-yellow hover:text-sahm-yellow">
-                <TikTokIcon />
-              </a>
+              <SocialButton
+                icon={<InstagramIcon />}
+                href={BUSINESS.social.instagram}
+                label="Instagram"
+                enabled={FEATURE_FLAGS.socialReady}
+                onDisabledClick={() => setShowSocialSoon(true)}
+              />
+              <SocialButton
+                icon={<FacebookIcon />}
+                href={BUSINESS.social.facebook}
+                label="Facebook"
+                enabled={FEATURE_FLAGS.socialReady}
+                onDisabledClick={() => setShowSocialSoon(true)}
+              />
+              <SocialButton
+                icon={<TikTokIcon />}
+                href={BUSINESS.social.tiktok}
+                label="TikTok"
+                enabled={FEATURE_FLAGS.socialReady}
+                onDisabledClick={() => setShowSocialSoon(true)}
+              />
             </div>
           </div>
 
@@ -244,7 +256,37 @@ export default function Footer({ lang }) {
         </div>
 
       </div>
+      <ComingSoonModal
+        open={showSocialSoon}
+        onClose={() => setShowSocialSoon(false)}
+        title={lang === 'es' ? 'Redes proximamente' : 'Social channels coming soon'}
+        message={
+          lang === 'es'
+            ? 'Estamos preparando los perfiles oficiales. Estaran disponibles pronto.'
+            : 'We are preparing the official profiles. They will be available soon.'
+        }
+        buttonLabel={lang === 'es' ? 'Entendido' : 'Got it'}
+      />
     </footer>
+  )
+}
+
+function SocialButton({ icon, href, label, enabled, onDisabledClick }) {
+  const baseClass =
+    'inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:border-sahm-yellow hover:text-sahm-yellow'
+
+  if (enabled) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className={baseClass}>
+        {icon}
+      </a>
+    )
+  }
+
+  return (
+    <button type="button" onClick={onDisabledClick} aria-label={label} className={baseClass}>
+      {icon}
+    </button>
   )
 }
 

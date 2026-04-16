@@ -1,58 +1,61 @@
 import { useEffect, useState } from 'react'
 import { WHATSAPP_URL, buildWhatsAppMessageUrl } from '../../config/site'
 import { useFadeIn } from '../../hooks/useFadeIn'
+import { useScrollY } from '../../hooks/useScrollY'
 
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1600&q=80'
 
 const COPY = {
   es: {
-    badge: 'Distribuidor oficial — Lima y despacho nacional',
-    titleA: 'Llantas, camaras',
+    badge: 'Distribuidor autorizado · Lima y despacho nacional',
+    titleA: 'Llantas, cámaras',
     titleB: 'y repuestos de moto.',
-    desc: 'Asesoramos por WhatsApp, validamos compatibilidad y despachamos a todo el pais con tiempos reales.',
-    ctaPrimary: 'Cotizar ahora',
-    ctaSecondary: 'Ver catalogo',
-    features: ['Compatibilidad validada', 'Despacho nacional', 'Atencion para taller y flota'],
-    fastReply: 'Respuesta rapida',
+    desc: 'Escríbenos el modelo de tu moto o la medida que necesitas. En minutos tienes stock confirmado, precio real y despacho coordinado a tu ciudad.',
+    ctaPrimary: 'Cotizar por WhatsApp',
+    ctaSecondary: 'Ver catálogo',
+    features: ['Compatibilidad validada', 'Despacho a todo el Perú', 'Atención para taller y flota'],
+    fastReplyLabel: 'Respuesta en',
+    fastReplyValue: '8 min',
     advisor: 'Hablar con asesor',
     supportTitle: 'Cobertura nacional',
-    supportText: 'Atendemos pedidos para ciudad, ruta y negocio con seguimiento real y coordinacion comercial.',
+    supportText: 'Lima en 24–48h. Regiones en 48–72h. Seguimiento real y coordinación comercial desde el primer mensaje.',
     supportMeta: '12 marcas activas',
-    serviceTitle: 'Asesoria tecnica',
-    serviceText: 'Te ayudamos a elegir antes de comprar, sin adivinar medidas ni compatibilidades.',
-    serviceMeta: 'Respuesta en 8 min',
+    serviceTitle: 'Asesoría técnica gratis',
+    serviceText: 'Te ayudamos a elegir antes de comprar. Sin adivinar medidas ni compatibilidades.',
+    serviceMeta: 'Sin costo adicional',
     stats: [
-      { target: 500, suffix: '+', label: 'Clientes atendidos', duration: 1400 },
-      { target: 48, suffix: 'h', label: 'Entrega nacional', duration: 1100 },
-      { target: 98, suffix: '%', label: 'Recompra', duration: 1500 },
+      { target: 1200, suffix: '+', label: 'Clientes atendidos', duration: 1800 },
+      { target: 48, suffix: 'h', label: 'Entrega en Lima', duration: 1100 },
+      { target: 98, suffix: '%', label: 'Tasa de recompra', duration: 1500 },
     ],
-    waQuote: 'Hola, quiero una cotizacion completa para mi moto',
-    alt: 'Moto en ruta con repuestos de calidad',
+    waQuote: 'Hola, quiero cotizar repuestos para mi moto. Mi modelo es: ',
+    alt: 'Moto en ruta con repuestos de calidad SAHM',
     scrollDown: 'Descubrir',
   },
   en: {
-    badge: 'Official distributor — Lima and nationwide shipping',
+    badge: 'Authorized distributor · Lima and nationwide shipping',
     titleA: 'Tires, tubes',
     titleB: 'and motorcycle parts.',
-    desc: 'We advise on WhatsApp, validate fitment and ship nationwide with real delivery timelines.',
-    ctaPrimary: 'Get a quote',
+    desc: 'Send us your bike model or the part size you need. In minutes you get real stock, exact pricing and shipping coordinated to your city.',
+    ctaPrimary: 'Quote on WhatsApp',
     ctaSecondary: 'Browse catalog',
-    features: ['Fitment checked', 'Nationwide shipping', 'Workshop and fleet service'],
-    fastReply: 'Fast reply',
+    features: ['Fitment validated', 'Nationwide shipping', 'Workshop and fleet service'],
+    fastReplyLabel: 'Reply in',
+    fastReplyValue: '8 min',
     advisor: 'Talk to an advisor',
     supportTitle: 'Nationwide coverage',
-    supportText: 'We support city, highway and business orders with real tracking and commercial coordination.',
+    supportText: 'Lima in 24–48h. Regions in 48–72h. Real tracking and commercial follow-up from the first message.',
     supportMeta: '12 active brands',
-    serviceTitle: 'Technical guidance',
-    serviceText: 'We help you choose the right option before checkout, not after a wrong order.',
-    serviceMeta: 'Reply in 8 min',
+    serviceTitle: 'Free technical guidance',
+    serviceText: 'We help you choose the right option before checkout — no guessing on sizes or fitment.',
+    serviceMeta: 'No extra charge',
     stats: [
-      { target: 500, suffix: '+', label: 'Customers served', duration: 1400 },
-      { target: 48, suffix: 'h', label: 'Nationwide delivery', duration: 1100 },
-      { target: 98, suffix: '%', label: 'Repeat purchase', duration: 1500 },
+      { target: 1200, suffix: '+', label: 'Customers served', duration: 1800 },
+      { target: 48, suffix: 'h', label: 'Lima delivery', duration: 1100 },
+      { target: 98, suffix: '%', label: 'Repeat purchase rate', duration: 1500 },
     ],
-    waQuote: 'Hi, I want a full quote for my motorcycle',
-    alt: 'Motorcycle on the road with quality spare parts',
+    waQuote: 'Hi, I want to quote parts for my motorcycle. My model is: ',
+    alt: 'Motorcycle on the road with quality SAHM spare parts',
     scrollDown: 'Discover',
   },
 }
@@ -78,57 +81,68 @@ function useCountUp(target, duration, active) {
 
 export default function Hero({ lang }) {
   const [statsRef, statsActive] = useFadeIn(0.6)
+  const scrollY = useScrollY()
   const copy = COPY[lang]
+  const glowShiftA = Math.min(scrollY * 0.08, 26)
+  const glowShiftB = Math.min(scrollY * 0.12, 38)
+  const imageShift = Math.min(scrollY * 0.06, 20)
 
   return (
-    <section id="inicio" className="relative overflow-hidden px-6 pb-20 pt-14 sm:pt-20 lg:pb-24">
-      <div className="ambient-glow absolute -left-32 top-6 h-72 w-72" />
-      <div className="ambient-glow absolute -right-24 top-20 h-80 w-80" />
+    <section id="inicio" className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
+      <div
+        className="ambient-glow absolute -left-32 top-6 h-72 w-72 will-change-transform"
+        style={{ transform: `translate3d(0, ${glowShiftA}px, 0)` }}
+      />
+      <div
+        className="ambient-glow absolute -right-24 top-20 h-80 w-80 will-change-transform"
+        style={{ transform: `translate3d(0, ${-glowShiftB}px, 0)` }}
+      />
       <div className="soft-grid absolute inset-0 opacity-40" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
         <div>
-          <p className="animate-fade-up mb-5 inline-flex items-center rounded-full border border-sahm-purple/20 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-sahm-purple shadow-sm">
+          <p className="animate-fade-up mb-5 inline-flex max-w-full items-center rounded-full border border-sahm-purple/20 bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-sahm-purple shadow-sm sm:text-xs sm:tracking-[0.18em]">
             {copy.badge}
           </p>
-          <h1 className="text-4xl font-black leading-[0.95] text-slate-900 sm:text-5xl lg:text-7xl">
+          <h1 className="text-4xl font-black leading-[0.95] text-slate-900 sm:text-5xl lg:text-6xl xl:text-7xl">
             <span className="animate-fade-up anim-delay-75 block">{copy.titleA}</span>
             <span className="animate-fade-up anim-delay-150 block text-sahm-purple">{copy.titleB}</span>
           </h1>
-          <p className="animate-fade-up anim-delay-225 mt-6 max-w-xl text-lg text-slate-600">{copy.desc}</p>
+          <p className="animate-fade-up anim-delay-225 mt-6 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">{copy.desc}</p>
 
-          <div className="animate-fade-up anim-delay-300 mt-8 flex flex-wrap gap-3">
+          <div className="animate-fade-up anim-delay-300 mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <a
               href={buildWhatsAppMessageUrl(copy.waQuote)}
               target="_blank"
               rel="noopener noreferrer"
-              className="animate-glow-cta btn-shimmer inline-flex items-center gap-2 rounded-full bg-sahm-purple px-7 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:-translate-y-0.5 active:scale-[0.97]"
+              className="animate-glow-cta btn-shimmer inline-flex w-full items-center justify-center gap-2 rounded-full bg-sahm-purple px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-white shadow-lg shadow-sahm-purple/30 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-sahm-purple/40 active:scale-[0.97] sm:w-auto"
             >
+              <WhatsAppSmallIcon />
               {copy.ctaPrimary}
             </a>
             <a
-              href="#productos"
-              className="btn-shimmer inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-3 text-sm font-bold uppercase tracking-[0.08em] text-slate-700 transition hover:border-slate-400 active:scale-[0.97]"
+              href="#categorias"
+              className="btn-shimmer inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-slate-700 transition hover:border-slate-400 active:scale-[0.97] sm:w-auto"
             >
               {copy.ctaSecondary}
             </a>
           </div>
 
-          <div className="animate-fade-up anim-delay-375 mt-6 flex flex-wrap gap-3">
+          <div className="animate-fade-up anim-delay-375 mt-6 flex flex-wrap gap-2">
             {copy.features.map(feature => (
               <span
                 key={feature}
-                className="rounded-full border border-sahm-purple/10 bg-white/90 px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-slate-700 shadow-sm"
+                className="inline-flex items-center gap-1.5 rounded-full border border-sahm-purple/10 bg-white/90 px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-slate-700 shadow-sm"
               >
+                <CheckIcon />
                 {feature}
               </span>
             ))}
           </div>
 
-          {/* Stats — count-up triggers when they enter the viewport */}
           <div
             ref={statsRef}
-            className="animate-fade-up anim-delay-450 mt-10 grid grid-cols-3 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg shadow-slate-200/50"
+            className="animate-fade-up anim-delay-450 mt-10 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg shadow-slate-200/50 sm:grid-cols-3"
           >
             {copy.stats.map(stat => (
               <StatCard key={stat.label} stat={stat} active={statsActive} />
@@ -138,25 +152,31 @@ export default function Hero({ lang }) {
 
         <div className="animate-scale-in anim-delay-150 relative">
           <div className="absolute -bottom-6 -right-6 hidden animate-fade-up anim-delay-600 rounded-2xl border border-white/70 bg-white/90 p-4 shadow-xl lg:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.13em] text-slate-500">{copy.fastReply}</p>
-            <p className="text-2xl font-black text-sahm-purple">8 min</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.13em] text-slate-500">{copy.fastReplyLabel}</p>
+            <p className="text-2xl font-black text-sahm-purple">{copy.fastReplyValue}</p>
           </div>
 
-          <div className="float-slow overflow-hidden rounded-[2rem] border border-white/60 bg-white p-3 shadow-2xl shadow-sahm-purple/20">
+          <div
+            className="will-change-transform transition-transform duration-150"
+            style={{ transform: `translate3d(0, ${-imageShift}px, 0)` }}
+          >
+            <div className="float-slow overflow-hidden rounded-[2rem] border border-white/60 bg-white p-3 shadow-2xl shadow-sahm-purple/20">
             <img
               src={HERO_IMAGE}
               alt={copy.alt}
-              className="h-[420px] w-full rounded-[1.4rem] object-cover sm:h-[500px]"
+              className="h-[320px] w-full rounded-[1.4rem] object-cover sm:h-[440px] lg:h-[500px]"
               loading="eager"
             />
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-shimmer mt-3 inline-flex w-full items-center justify-center rounded-xl bg-sahm-yellow py-3 text-sm font-black uppercase tracking-[0.1em] text-slate-900 transition hover:brightness-105 active:scale-[0.98]"
+              className="btn-shimmer mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sahm-yellow py-3 text-sm font-black uppercase tracking-[0.1em] text-slate-900 transition hover:brightness-105 active:scale-[0.98]"
             >
+              <WhatsAppSmallIcon />
               {copy.advisor}
             </a>
+            </div>
           </div>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -176,8 +196,7 @@ export default function Hero({ lang }) {
         </div>
       </div>
 
-      {/* Scroll-down indicator */}
-      <div className="relative mx-auto mt-14 flex max-w-7xl justify-center lg:justify-start">
+      <div className="relative mx-auto mt-14 flex max-w-7xl justify-center">
         <a
           href="#beneficios"
           aria-label={copy.scrollDown}
@@ -211,12 +230,12 @@ function StatCard({ stat, active }) {
   const value = useCountUp(stat.target, stat.duration, active)
 
   return (
-    <article className="rounded-xl bg-slate-50 p-3 text-center">
+    <article className="flex min-h-[104px] flex-col justify-center rounded-xl bg-slate-50 p-3 text-center">
       <p className="text-2xl font-black text-sahm-purple sm:text-3xl">
-        {value}
+        {value.toLocaleString('es-PE')}
         {stat.suffix}
       </p>
-      <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">{stat.label}</p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">{stat.label}</p>
     </article>
   )
 }
@@ -231,10 +250,26 @@ function DetailCard({ tone, title, text, meta }) {
   const titleClass = tone === 'dark' ? 'text-sahm-yellow' : 'text-sahm-purple'
 
   return (
-    <article className={`rounded-[1.5rem] border p-5 shadow-lg ${cardClass}`}>
-      <p className={`text-xs font-black uppercase tracking-[0.14em] ${titleClass}`}>{title}</p>
-      <p className="mt-2 text-base font-bold leading-snug">{text}</p>
-      <p className={`mt-3 text-sm font-semibold ${metaClass}`}>{meta}</p>
+    <article className={`flex min-h-[220px] flex-col rounded-[1.5rem] border p-5 shadow-lg ${cardClass}`}>
+      <p className={`min-h-[32px] text-xs font-black uppercase tracking-[0.14em] ${titleClass}`}>{title}</p>
+      <p className="mt-2 min-h-[84px] overflow-hidden text-base font-bold leading-snug">{text}</p>
+      <p className={`mt-auto text-sm font-semibold ${metaClass}`}>{meta}</p>
     </article>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="text-sahm-purple">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  )
+}
+
+function WhatsAppSmallIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
   )
 }

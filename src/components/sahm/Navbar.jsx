@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NAV_LINKS_BY_LANG } from '../../config/navigation'
 import { WHATSAPP_URL } from '../../config/site'
 import { WhatsAppIcon } from './icons'
@@ -21,10 +21,43 @@ const UI_TEXT = {
 
 export default function Navbar({ lang, setLang }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeHref, setActiveHref] = useState('#inicio')
   const scrollY = useScrollY()
   const navLinks = NAV_LINKS_BY_LANG[lang]
   const text = UI_TEXT[lang]
   const scrolled = scrollY > 10
+
+  useEffect(() => {
+    const sectionIds = navLinks
+      .map(link => link.href)
+      .filter(href => href.startsWith('#'))
+      .map(href => href.slice(1))
+
+    const sections = sectionIds
+      .map(id => document.getElementById(id))
+      .filter(Boolean)
+
+    if (sections.length === 0) return undefined
+
+    const updateActive = () => {
+      const marker = window.scrollY + 180
+      let current = '#inicio'
+
+      sections.forEach(section => {
+        if (marker >= section.offsetTop) current = `#${section.id}`
+      })
+
+      setActiveHref(current)
+    }
+
+    updateActive()
+    window.addEventListener('scroll', updateActive, { passive: true })
+    window.addEventListener('resize', updateActive)
+    return () => {
+      window.removeEventListener('scroll', updateActive)
+      window.removeEventListener('resize', updateActive)
+    }
+  }, [navLinks])
 
   return (
     <nav className={`sticky top-0 z-50 border-b border-sahm-purple/20 bg-sahm-yellow/95 backdrop-blur-xl transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-sahm-purple/15' : ''}`}>
@@ -38,9 +71,16 @@ export default function Navbar({ lang, setLang }) {
             <a
               key={link.label}
               href={link.href}
-              className="text-xs font-semibold uppercase tracking-[0.13em] text-sahm-purple/90 transition hover:text-sahm-purple"
+              className={`relative px-1 py-1 text-xs font-semibold uppercase tracking-[0.13em] transition ${
+                activeHref === link.href ? 'text-sahm-purple' : 'text-sahm-purple/90 hover:text-sahm-purple'
+              }`}
             >
               {link.label}
+              <span
+                className={`absolute -bottom-0.5 left-0 h-[2px] rounded-full bg-sahm-purple transition-all duration-300 ${
+                  activeHref === link.href ? 'w-full opacity-100' : 'w-0 opacity-0'
+                }`}
+              />
             </a>
           ))}
         </div>
@@ -76,7 +116,9 @@ export default function Navbar({ lang, setLang }) {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-semibold uppercase tracking-[0.09em] text-slate-800"
+                className={`text-sm font-semibold uppercase tracking-[0.09em] transition ${
+                  activeHref === link.href ? 'text-sahm-purple' : 'text-slate-800'
+                }`}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}

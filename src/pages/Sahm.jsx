@@ -21,7 +21,7 @@ export default function Sahm() {
   }, [lang])
 
   return (
-    <div className="min-h-screen font-sans antialiased text-slate-900">
+    <div className="min-h-screen overflow-x-hidden font-sans antialiased text-slate-900">
       <ScrollProgress />
       <Navbar lang={lang} setLang={setLang} />
       <TrustBar lang={lang} />

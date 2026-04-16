@@ -2,30 +2,30 @@ import { useFadeIn } from '../../hooks/useFadeIn'
 
 const COPY = {
   es: {
-    kicker: 'Por que elegir SAHM',
-    introTitle: 'Una experiencia comercial pensada para resolver rapido y vender con confianza.',
+    kicker: 'Por qué elegir SAHM',
+    introTitle: 'Una experiencia comercial pensada para resolver rápido y vender con confianza.',
     introText:
-      'Nos enfocamos en que encuentres la pieza correcta, con stock claro y acompanamiento real desde la consulta hasta la entrega.',
-    chips: ['Asesoria por modelo', 'Despacho coordinado', 'Atencion para taller y flota'],
+      'Nos enfocamos en que encuentres la pieza correcta, con stock claro y acompañamiento real desde la consulta hasta la entrega.',
+    chips: ['Asesoría por modelo', 'Despacho coordinado', 'Atención para taller y flota'],
     items: [
       {
         title: 'Compatibilidad sin errores',
-        subtitle: 'Validamos medidas, aro y uso antes de cotizar para evitar compras equivocadas.',
+        subtitle: 'Validamos medidas, aro y uso antes de cotizar para evitar compras equivocadas. Sin costo de asesoría.',
         icon: 'fit',
       },
       {
         title: 'Stock con respuesta real',
-        subtitle: 'Te confirmamos disponibilidad y tiempos antes del pago, sin promesas vacias.',
+        subtitle: 'Confirmamos disponibilidad y tiempos antes del pago. Sin promesas vacías ni sorpresas al cerrar el pedido.',
         icon: 'stock',
       },
       {
         title: 'Cobertura nacional',
-        subtitle: 'Despachamos a domicilio, negocio o taller con seguimiento comercial durante el envio.',
+        subtitle: 'Lima en 24–48h. Regiones en 48–72h. Seguimiento comercial durante todo el envío.',
         icon: 'route',
       },
       {
         title: 'Postventa que responde',
-        subtitle: 'Acompaniamos dudas, reposiciones y nuevas compras para que sigas operando sin friccion.',
+        subtitle: 'Acompañamos dudas, reposiciones y nuevas compras para que sigas operando sin fricción.',
         icon: 'shield',
       },
     ],
@@ -39,17 +39,17 @@ const COPY = {
     items: [
       {
         title: 'Fitment without mistakes',
-        subtitle: 'We validate size, rim and use case before quoting so you do not order the wrong part.',
+        subtitle: 'We validate size, rim and use case before quoting so you do not order the wrong part. No advisory fee.',
         icon: 'fit',
       },
       {
         title: 'Real stock response',
-        subtitle: 'We confirm availability and timing before payment, not after checkout.',
+        subtitle: 'We confirm availability and timing before payment. No empty promises or surprises at checkout.',
         icon: 'stock',
       },
       {
         title: 'Nationwide coverage',
-        subtitle: 'We ship to home, business or workshop with commercial follow-up during delivery.',
+        subtitle: 'Lima in 24–48h. Regions in 48–72h. Commercial follow-up throughout the entire shipment.',
         icon: 'route',
       },
       {
@@ -66,17 +66,17 @@ export default function Beneficios({ lang }) {
   const copy = COPY[lang]
 
   return (
-    <section id="beneficios" ref={ref} className="px-6 py-16">
+    <section id="beneficios" ref={ref} className="px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-7xl">
         <p
-          className={`text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple transition-all duration-500 ease-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
+          className={`text-xs font-bold uppercase tracking-[0.16em] text-sahm-purple transition-all duration-500 ease-out ${visible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-4 opacity-0 blur-[4px]'}`}
         >
           {copy.kicker}
         </p>
 
         <div className="mt-4 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
           <article
-            className={`relative overflow-hidden rounded-[2rem] border border-sahm-purple/20 bg-sahm-purple p-8 text-white shadow-2xl shadow-sahm-purple/20 sm:p-10 transition-all duration-600 ease-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            className={`relative overflow-hidden rounded-[2rem] border border-sahm-purple/20 bg-sahm-purple p-8 text-white shadow-2xl shadow-sahm-purple/20 sm:p-10 transition-all duration-600 ease-out ${visible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-8 opacity-0 blur-[6px]'}`}
             style={{ transitionDelay: visible ? '60ms' : '0ms' }}
           >
             <div className="soft-grid absolute inset-0 opacity-20" />
@@ -102,13 +102,13 @@ export default function Beneficios({ lang }) {
               <article
                 key={item.title}
                 style={{ transitionDelay: visible ? `${100 + index * 90}ms` : '0ms' }}
-                className={`card-shine group rounded-[1.75rem] border border-sahm-purple/15 bg-white p-6 shadow-lg shadow-sahm-purple/10 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-sahm-purple/30 hover:shadow-xl hover:shadow-sahm-purple/20 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}`}
+                className={`card-shine group flex h-full min-h-[260px] flex-col rounded-[1.75rem] border border-sahm-purple/15 bg-white p-6 shadow-lg shadow-sahm-purple/10 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-sahm-purple/30 hover:shadow-xl hover:shadow-sahm-purple/20 ${visible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-6 opacity-0 blur-[6px]'}`}
               >
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sahm-yellow text-sahm-purple shadow-lg shadow-sahm-yellow/30 transition duration-300 group-hover:rotate-6 group-hover:scale-110">
                   <Icon type={item.icon} />
                 </div>
-                <h3 className="text-xl font-black text-slate-900">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.subtitle}</p>
+                <h3 className="min-h-[56px] text-xl font-black text-slate-900">{item.title}</h3>
+                <p className="mt-3 min-h-[96px] overflow-hidden text-sm leading-relaxed text-slate-600">{item.subtitle}</p>
               </article>
             ))}
           </div>

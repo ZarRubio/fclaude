@@ -27,6 +27,54 @@ const COPY = {
   },
 }
 
+// Strip accents and lowercase for accent-insensitive matching
+function normalize(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+}
+
+// Score a product against a single normalized token
+function scoreProduct(p, token, label) {
+  const name = normalize(p.name)
+  const code = normalize(p.code)
+  const sub = normalize(p.subcategory)
+  const cat = normalize(p.category)
+  const normLabel = normalize(label)
+
+  if (name === token || code === token) return 4           // exact name/code
+  if (name.startsWith(token) || code.startsWith(token)) return 3  // prefix
+  if (name.includes(token) || code.includes(token)) return 2       // name/code contains
+  if (normLabel.includes(token) || sub.includes(token) || cat.includes(token)) return 1
+  return 0
+}
+
+function searchProducts(query, products, lang) {
+  const q = normalize(query.trim())
+  if (!q) return products
+
+  // Split into tokens — every token must score > 0 for the product to appear
+  const tokens = q.split(/\s+/).filter(Boolean)
+
+  const scored = []
+  for (const p of products) {
+    const label = getProductLabel(p, lang)
+    let totalScore = 0
+    let matched = true
+    for (const token of tokens) {
+      const s = scoreProduct(p, token, label)
+      if (s === 0) { matched = false; break }
+      totalScore += s
+    }
+    if (matched) scored.push({ p, score: totalScore })
+  }
+
+  // Sort by score descending; stable (same score keeps catalog order)
+  scored.sort((a, b) => b.score - a.score)
+  return scored.map(s => s.p)
+}
+
 export default function SearchPage({ query: initialQuery, lang, setLang }) {
   const [inputValue, setInputValue] = useState(initialQuery)
   const [activeQuery, setActiveQuery] = useState(initialQuery)
@@ -43,20 +91,16 @@ export default function SearchPage({ query: initialQuery, lang, setLang }) {
     setActiveQuery(initialQuery)
   }, [initialQuery])
 
-  const results = useMemo(() => {
-    const q = activeQuery.toLowerCase().trim()
-    if (!q) return CATALOG_PRODUCTS
-    return CATALOG_PRODUCTS.filter(p => {
-      const label = getProductLabel(p, lang).toLowerCase()
-      return (
-        label.includes(q) ||
-        p.name.toLowerCase().includes(q) ||
-        p.code.toLowerCase().includes(q) ||
-        p.subcategory.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
-      )
-    })
-  }, [activeQuery, lang])
+  // Live search: update results after a short debounce
+  useEffect(() => {
+    const timer = setTimeout(() => setActiveQuery(inputValue), 250)
+    return () => clearTimeout(timer)
+  }, [inputValue])
+
+  const results = useMemo(
+    () => searchProducts(activeQuery, CATALOG_PRODUCTS, lang),
+    [activeQuery, lang]
+  )
 
   const handleSubmit = e => {
     e.preventDefault()

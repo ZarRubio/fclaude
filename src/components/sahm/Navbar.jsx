@@ -3,6 +3,7 @@ import { NAV_LINKS_BY_LANG, PRODUCT_SUBCATEGORIES } from '../../config/navigatio
 import { buildWhatsAppMessageUrl } from '../../config/site'
 import { WhatsAppIcon } from './icons'
 import { useScrollY } from '../../hooks/useScrollY'
+import { useCart } from '../../context/CartContext'
 
 const WA_MESSAGE = {
   es: 'Hola, quiero cotizar repuestos para mi moto. ',
@@ -16,6 +17,7 @@ const UI_TEXT = {
     langLabel: 'Idioma',
     search: 'Buscar',
     close: 'Cerrar menú',
+    cart: 'Carrito',
   },
   en: {
     quoteWhatsapp: 'Quote on WhatsApp',
@@ -23,6 +25,7 @@ const UI_TEXT = {
     langLabel: 'Language',
     search: 'Search',
     close: 'Close menu',
+    cart: 'Cart',
   },
 }
 
@@ -32,6 +35,7 @@ export default function Navbar({ lang, setLang }) {
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false)
   const [activeHref, setActiveHref] = useState('#/')
   const scrollY = useScrollY()
+  const { totalItems } = useCart()
   const navLinks = NAV_LINKS_BY_LANG[lang]
   const subcategories = PRODUCT_SUBCATEGORIES[lang]
   const text = UI_TEXT[lang]
@@ -180,6 +184,19 @@ export default function Navbar({ lang, setLang }) {
           </a>
 
           <a
+            href="#/carrito"
+            aria-label={text.cart}
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-sahm-purple/20 bg-white text-sahm-purple transition hover:border-sahm-purple hover:bg-sahm-purple/5 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sahm-purple focus-visible:ring-offset-1"
+          >
+            <CartIcon />
+            {totalItems > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-sahm-purple text-[10px] font-black text-white">
+                {totalItems > 9 ? '9+' : totalItems}
+              </span>
+            )}
+          </a>
+
+          <a
             href={buildWhatsAppMessageUrl(WA_MESSAGE[lang])}
             target="_blank"
             rel="noopener noreferrer"
@@ -275,6 +292,19 @@ export default function Navbar({ lang, setLang }) {
             </a>
 
             <a
+              href="#/carrito"
+              className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.09em] text-slate-800 transition hover:text-sahm-purple"
+              onClick={() => setMenuOpen(false)}
+            >
+              {text.cart}
+              {totalItems > 0 && (
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-sahm-purple text-[10px] font-black text-white">
+                  {totalItems > 9 ? '9+' : totalItems}
+                </span>
+              )}
+            </a>
+
+            <a
               href={buildWhatsAppMessageUrl(WA_MESSAGE[lang])}
               target="_blank"
               rel="noopener noreferrer"
@@ -337,6 +367,16 @@ function SearchIcon() {
     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
       <circle cx="11" cy="11" r="7" />
       <path strokeLinecap="round" d="M20 20l-4.35-4.35" />
+    </svg>
+  )
+}
+
+function CartIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16 10a4 4 0 01-8 0" />
     </svg>
   )
 }

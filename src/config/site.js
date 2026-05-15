@@ -1,6 +1,6 @@
 const FALLBACK_WHATSAPP_NUMBER = '51987881821'
 
-const envNumber = import.meta.env.VITE_WHATSAPP_NUMBER || ''
+const envNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ''
 const cleanNumber = String(envNumber).replace(/\D/g, '')
 
 export const WHATSAPP_NUMBER = cleanNumber || FALLBACK_WHATSAPP_NUMBER

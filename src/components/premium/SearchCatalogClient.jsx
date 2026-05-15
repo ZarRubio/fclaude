@@ -1,0 +1,60 @@
+'use client'
+
+import { useMemo, useState } from 'react'
+import ProductCard from './ProductCard'
+import { CATALOG_PRODUCTS, getProductLabel } from '../../config/catalog'
+
+function normalize(value) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
+
+function searchProducts(query) {
+  const q = normalize(query.trim())
+  if (!q) return CATALOG_PRODUCTS
+  const tokens = q.split(/\s+/).filter(Boolean)
+  return CATALOG_PRODUCTS.filter(product => {
+    const haystack = normalize([
+      getProductLabel(product, 'es'),
+      product.code,
+      product.category,
+      product.subcategory,
+      product.name,
+    ].join(' '))
+    return tokens.every(token => haystack.includes(token))
+  })
+}
+
+export default function SearchCatalogClient() {
+  const [query, setQuery] = useState('')
+  const results = useMemo(() => searchProducts(query), [query])
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr]">
+      <div className="gsap-reveal">
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-sahm-yellow">Catálogo SAHM</p>
+        <h1 className="mt-4 text-5xl font-black leading-none text-white sm:text-6xl">Busca por producto, medida o referencia.</h1>
+        <p className="mt-5 text-white/55">Encuentra llantas, cámaras, repuestos y accesorios por tipo de producto. Si tienes dudas, agrega productos al carrito y cotiza por WhatsApp.</p>
+      </div>
+
+      <div className="gsap-reveal rounded-[2rem] border border-white/10 bg-white/[0.035] p-4 sm:p-5">
+        <label className="block">
+          <span className="text-[10px] font-black uppercase tracking-[0.18em] text-white/38">Búsqueda de catálogo</span>
+          <input
+            type="search"
+            value={query}
+            onChange={event => setQuery(event.target.value)}
+            placeholder="Medida, referencia o subcategoría"
+            className="mt-3 w-full rounded-2xl border border-white/10 bg-black/45 px-5 py-4 text-base font-bold text-white outline-none placeholder:text-white/22 focus:border-sahm-yellow/70"
+          />
+        </label>
+        <p className="mt-4 text-sm font-semibold text-white/45">{results.length} resultados</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {results.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)}
+        </div>
+      </div>
+    </div>
+  )
+}

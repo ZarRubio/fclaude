@@ -18,6 +18,7 @@ const CARD_SIZE = 900
 const DETAIL_SIZE = 1800
 
 function sourcePath(product, file) {
+  if (product.sourceDir) return path.join(sourceRoot, product.sourceDir, file)
   return path.join(sourceRoot, product.category, product.subcategory, product.name, file)
 }
 

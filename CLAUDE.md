@@ -6,9 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm install              # install dependencies
-npm run dev              # start dev server (Vite)
-npm run build            # production build
-npm run preview          # preview production build locally
+npm run dev              # start Next.js dev server
+npm run build            # static export (outputs to /out)
+npm run start            # serve production build
+npm run preview          # serve /out with `serve`
 npm run optimize:images  # compress catalog images with Sharp (run before build)
 ```
 
@@ -16,9 +17,8 @@ No test runner or linter is configured.
 
 ## Environment
 
-Copy `.env.example` to `.env` and set the WhatsApp number:
-
 ```env
+# No .env.example — only one env var is used:
 VITE_WHATSAPP_NUMBER=51999999999   # digits only, with country code, no +
 ```
 
@@ -26,47 +26,50 @@ The fallback number in `src/config/site.js` is used if the env var is absent.
 
 ## Architecture
 
-React SPA for **SAHM** (motorcycle tire distributor, Peru). `App.jsx` owns routing, language state, and localStorage persistence.
+Next.js 16 App Router static export for **SAHM** (motorcycle tire/parts distributor, Peru). `next.config.mjs` sets `output: 'export'` and `trailingSlash: true` for FTP deployment to Hostinger.
 
-**Hash-based routing (no router library):**
-- `#/` → `src/pages/Sahm.jsx` — main landing page
-- `#/categorias` → `src/pages/CategoriesPage.jsx` — category browser
-- `#/producto/:id` → `src/pages/ProductDetail.jsx` — product detail with image gallery
+**App Router (`src/app/`):**
+- `/` → `page.jsx` renders `HomeExperience`
+- `/productos` → category listing
+- `/productos/[slug]` → filtered product list by category slug
+- `/producto/[id]` → product detail
+- `/buscar` → fitment / search
+- `/carrito` → cart
+- `/nosotros` → about
+- `/contacto` → contact
+- `layout.jsx` wraps all routes with `Providers`, `PremiumNav`, `PremiumFooter`, and `FloatingActions`
 
-`App.jsx` parses `window.location.hash` on mount and listens to `hashchange`. Language state (`lang`, `setLang`) lives in `App.jsx` and flows down to all pages and section components.
+**Client boundary:** `src/app/layout.jsx` is a Server Component; `Providers` is `'use client'` and wraps children. All interactive components under `src/components/premium/` are `'use client'`.
 
-**Bilingual (ES / EN):** `lang` is `'es'` | `'en'`, persisted to `localStorage` under key `sahm_lang`. Every section component owns its own `COPY = { es: {…}, en: {…} }` object for copy. Navigation labels come from `src/config/navigation.js` (`NAV_LINKS_BY_LANG`).
+**Animation stack:**
+- **Lenis** — smooth scroll (initialized in `Providers`, skipped if `prefers-reduced-motion`)
+- **GSAP + ScrollTrigger** — scroll-driven reveal (`.gsap-reveal` class) and parallax (`.parallax-media` class), scoped to the `Providers` div and refreshed on pathname change
+- **Framer Motion** — nav mega-menu and other micro-animations
 
 **Config layer (`src/config/`):**
-- `site.js` — `WHATSAPP_NUMBER`, `WHATSAPP_URL`, `buildWhatsAppMessageUrl(message)`, and feature flags `catalogReady` / `socialReady` (booleans that gate unreleased UI).
-- `navigation.js` — `NAV_LINKS_BY_LANG` keyed by `'es'` / `'en'`.
-- `catalogData.js` — raw product and category data (source of truth; edit here to add/remove products).
-- `catalog.js` — enriches raw data with image paths and URLs; exports `CATALOG_PRODUCTS`, `CATALOG_CATEGORIES`, and helpers: `getSubcategories()`, `getProductById()`, `getProductLabel()`, `getProductWhatsAppMessage()`.
+- `site.js` — `WHATSAPP_NUMBER`, `WHATSAPP_URL`, `buildWhatsAppMessageUrl(message)`, feature flags `catalogReady` / `socialReady`
+- `navigation.js` — `PRODUCT_SUBCATEGORIES` keyed by `'es'` / `'en'`
+- `catalogData.js` — raw product/category data (source of truth for adding/removing products)
+- `catalog.js` — enriches raw data with image paths; exports `CATALOG_PRODUCTS`, `CATALOG_CATEGORIES`, `getSubcategories()`, `getProductById()`, `getProductLabel()`, `getProductWhatsAppMessage()`
+- `categories.js` — category definitions
 
-**Landing page sections (rendered in order in `Sahm.jsx`):**
-`Navbar` → `Hero` → `TrustBar` → `Beneficios` → `Confianza` → `Categorias` → `ProductosDestacados` → `Footer`
+**Data layer (`src/lib/premiumData.js`):** Derives `featuredBrands`, `premiumCategories`, `heroProduct`, `bestSellers`, `oemHighlights`, and `testimonials` from `CATALOG_PRODUCTS` for use in `HomeExperience`.
 
-**Additional components (`src/components/sahm/`):**
-- `FloatingWhatsApp` — fixed floating button, visible after scroll threshold
-- `ScrollProgress` — scroll progress bar at top of page
-- `ComingSoonModal` — reusable modal for gated features
-- `icons.jsx` — centralized inline SVG icon components
+**State:**
+- `CartContext` (`src/context/CartContext.jsx`) — cart state persisted to `localStorage` under `sahm_cart`; exposes `addToCart`, `removeFromCart`, `updateQty`, `clearCart`, `totalItems` via `useCart()` hook
+- No other global state; UI state is component-local
 
-**Hooks (`src/hooks/`):**
-- `useFadeIn(threshold?)` — returns `[ref, isVisible]` via `IntersectionObserver`; attach `ref` to a section root and toggle Tailwind opacity/translate on `isVisible`. Disconnects after first intersection.
-- `useScrollY()` — returns current scroll Y position; used by Navbar (shadow), FloatingWhatsApp (visibility), and Hero (parallax).
-
-**State management:** No Context API or Redux. Component-local `useState` for UI state (menus, filters, accordions, image carousels). `App.jsx` is the only global state owner (lang + routing).
+**Legacy landing (`src/components/sahm/`):** Original Vite-era section components (`Hero`, `Navbar`, `TrustBar`, `Beneficios`, `Confianza`, `Categorias`, `ProductosDestacados`, `Footer`, etc.) and hooks (`useFadeIn`, `useScrollY`) are retained but no longer part of the active routes. The new premium UI lives entirely in `src/components/premium/`.
 
 ## Styling
 
-- **Tailwind CSS 3** with two brand tokens: `sahm-yellow` (`#F5C000`) and `sahm-purple` (`#3D2785`).
-- Font: **Kanit** (loaded from Google Fonts in `src/index.css`).
-- Global utility classes defined in `src/index.css`: `.ambient-glow`, `.soft-grid`, `.float-slow`, `.card-shine`, `.btn-shimmer`.
-- CSS variables (`--sahm-yellow`, `--sahm-purple`, `--bg-1`, `--bg-2`, `--ink`) available alongside Tailwind classes.
-- `tailwind.config.js` also defines custom animations: `marquee`, `fade-up`, `fade-in`, `scale-in`, `glow-cta`, `pulse-ring`, `scroll-bounce`.
-- `prefers-reduced-motion` is respected — `scroll-behavior`, `.float-slow`, and all scroll animations are disabled.
+- **Tailwind CSS 3** — brand tokens `sahm-yellow` (`#F5C000`) and `sahm-purple` (`#3D2785`)
+- Font: **Kanit** (loaded from Google Fonts in `src/index.css`)
+- Global utilities in `src/index.css`: `.ambient-glow`, `.soft-grid`, `.float-slow`, `.card-shine`, `.btn-shimmer`, `.premium-float`, `.magnetic-btn`, `.brand-3d`
+- CSS variables: `--sahm-yellow`, `--sahm-purple`, `--bg-1`, `--bg-2`, `--ink`
+- Custom Tailwind animations in `tailwind.config.js`: `marquee`, `fade-up`, `fade-in`, `scale-in`, `glow-cta`, `pulse-ring`, `scroll-bounce`
+- `prefers-reduced-motion` is respected — Lenis and GSAP animations are skipped entirely
 
 ## Deployment
 
-Deployed to Hostinger via FTP using a CI workflow (`.github/workflows/`). Vite uses a relative base path (`./`) for compatibility.
+Static export deployed to Hostinger via FTP. CI workflow at `.github/workflows/deploy-hostinger.yml`. Always run `npm run optimize:images` before a build that includes new catalog images.

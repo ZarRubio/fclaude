@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 const CART_KEY = 'sahm_cart'
@@ -5,6 +7,7 @@ const CartContext = createContext(null)
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(() => {
+    if (typeof window === 'undefined') return []
     try { return JSON.parse(localStorage.getItem(CART_KEY)) ?? [] } catch { return [] }
   })
 
@@ -12,11 +15,11 @@ export function CartProvider({ children }) {
     localStorage.setItem(CART_KEY, JSON.stringify(items))
   }, [items])
 
-  const addToCart = useCallback(productId => {
+  const addToCart = useCallback((productId, qty = 1) => {
     setItems(prev => {
       const found = prev.find(i => i.productId === productId)
-      if (found) return prev.map(i => i.productId === productId ? { ...i, qty: i.qty + 1 } : i)
-      return [...prev, { productId, qty: 1 }]
+      if (found) return prev.map(i => i.productId === productId ? { ...i, qty: i.qty + qty } : i)
+      return [...prev, { productId, qty }]
     })
   }, [])
 

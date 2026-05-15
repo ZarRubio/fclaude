@@ -1,18 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx,mdx}'],
   theme: {
     extend: {
       transitionDuration: {
         600: '600ms',
       },
       colors: {
-        'sahm-yellow': '#F5C000',
-        'sahm-purple': '#3D2785',
+        'sahm-yellow': '#F0A500',
+        'sahm-purple': '#2C1A6E',
+        'sahm-night':  '#120B2E',
+        'sahm-lilac': '#F5F0FA',
+        'sahm-cream': '#FFF4C7',
       },
       fontFamily: {
-        sans: ['Kanit', 'sans-serif'],
-        body: ['Kanit', 'sans-serif'],
+        heading: ['var(--font-heading)', 'Barlow Condensed', 'sans-serif'],
+        sans:    ['var(--font-body)', 'Inter', 'sans-serif'],
+        body:    ['var(--font-body)', 'Inter', 'sans-serif'],
       },
       animation: {
         marquee: 'marquee 28s linear infinite',

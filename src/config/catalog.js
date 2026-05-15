@@ -6,12 +6,11 @@ import {
 } from './catalogData'
 
 function assetPath(path) {
-  const base = import.meta.env.BASE_URL || '/'
-  const normalizedBase = base.endsWith('/') ? base : `${base}/`
-  return encodeURI(`${normalizedBase}${path}`)
+  return encodeURI(`/${path}`)
 }
 
 function originalImagePath(product, file) {
+  if (product.sourceDir) return `${CATALOG_IMAGE_ROOT}/${product.sourceDir}/${file}`
   return `${CATALOG_IMAGE_ROOT}/${product.category}/${product.subcategory}/${product.name}/${file}`
 }
 
@@ -31,7 +30,7 @@ function product(item) {
     ...item,
     slug: item.id,
     code: item.name.replace(/\s+/g, ' ').trim(),
-    productUrl: `#/producto/${item.id}`,
+    productUrl: `/productos/${item.id}`,
     images,
   }
 }
@@ -58,6 +57,7 @@ export function getProductById(id) {
 
 export function getProductLabel(productItem, lang = 'es') {
   if (productItem.category === 'Llantas') return `${lang === 'en' ? 'Tire' : 'Llanta'} ${productItem.name}`
+  if (productItem.category === 'Carburadores') return `${lang === 'en' ? 'Carburetor' : 'Carburador'} ${productItem.name}`
   return `${lang === 'en' ? 'Tube' : 'Cámara'} ${productItem.name}`
 }
 

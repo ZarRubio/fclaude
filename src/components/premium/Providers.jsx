@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 export default function Providers({ children }) {
   const scope = useRef(null)
+  const lenisRef = useRef(null)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function Providers({ children }) {
       lerp: 0.09,
       smoothWheel: true,
     })
+    lenisRef.current = lenis
 
     // Drive Lenis through GSAP's ticker so ScrollTrigger reads the same
     // scroll position that Lenis is rendering — prevents trigger desync.
@@ -34,8 +36,17 @@ export default function Providers({ children }) {
     return () => {
       gsap.ticker.remove(tick)
       lenis.destroy()
+      lenisRef.current = null
     }
   }, [])
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      lenisRef.current?.scrollTo(0, { immediate: true, force: true })
+      window.scrollTo(0, 0)
+      ScrollTrigger.refresh()
+    })
+  }, [pathname])
 
   useGSAP(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return

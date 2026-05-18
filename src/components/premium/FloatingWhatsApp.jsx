@@ -1,13 +1,24 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { buildWhatsAppMessageUrl } from '../../config/site'
 
 export default function FloatingWhatsApp() {
+  const pathname = usePathname()
+  // On product detail pages the sticky CTA bar is ~72px tall on mobile.
+  // Shift the floating button above it so they don't overlap.
+  const onProductDetail = /^\/productos\/.+/.test(pathname)
+
   return (
     <a
       href={buildWhatsAppMessageUrl('Hola, quiero cotizar productos SAHM. La categoría, medida o referencia es: ')}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Cotizar por WhatsApp"
-      className="fixed bottom-5 right-5 z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-black/25 transition hover:-translate-y-0.5 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sahm-yellow focus-visible:ring-offset-2 sm:bottom-6 sm:right-6"
+      className={[
+        'fixed right-5 z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-black/25 transition hover:-translate-y-0.5 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sahm-yellow focus-visible:ring-offset-2 sm:right-6',
+        onProductDetail ? 'bottom-[88px] sm:bottom-[88px] lg:bottom-6' : 'bottom-5 sm:bottom-6',
+      ].join(' ')}
     >
       <svg
         aria-hidden="true"

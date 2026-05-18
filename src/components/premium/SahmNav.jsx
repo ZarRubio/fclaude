@@ -9,7 +9,7 @@ import { buildWhatsAppMessageUrl } from '../../config/site'
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
-  { href: '/productos', label: 'Productos', hasDropdown: true },
+  { href: '/categorias', label: 'Productos', hasDropdown: true },
   { href: '/nosotros', label: 'Nosotros' },
   { href: '/contacto', label: 'Contacto' },
 ]
@@ -18,14 +18,14 @@ export default function SahmNav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const pathname = usePathname()
-  const { totalItems } = useCart()
+  const { totalItems, hasHydrated } = useCart()
   const subcategories = PRODUCT_SUBCATEGORIES.es
 
   const isActive = href => href === '/' ? pathname === '/' : pathname.startsWith(href)
 
   return (
     <header className="sticky top-0 z-50 border-b border-sahm-purple/20 bg-sahm-yellow shadow-md">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="shrink-0">
           <img
             src="/images/Logos/SAHM_Blanco_SAHM.svg"
@@ -98,7 +98,7 @@ export default function SahmNav() {
             className="relative grid h-11 w-11 place-items-center rounded-full bg-white text-sahm-purple shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
           >
             <CartIcon />
-            {totalItems > 0 && (
+            {hasHydrated && totalItems > 0 && (
               <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-sahm-purple text-[10px] font-black text-white">
                 {totalItems > 9 ? '9+' : totalItems}
               </span>
@@ -119,7 +119,7 @@ export default function SahmNav() {
         <div className="flex items-center gap-2 lg:hidden">
           <Link href="/carrito" aria-label="Carrito" className="relative grid h-10 w-10 place-items-center rounded-full bg-white text-sahm-purple">
             <CartIcon />
-            {totalItems > 0 && (
+            {hasHydrated && totalItems > 0 && (
               <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-sahm-purple text-[10px] font-black text-white">
                 {totalItems > 9 ? '9+' : totalItems}
               </span>
@@ -136,40 +136,45 @@ export default function SahmNav() {
         </div>
       </nav>
 
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-sahm-purple px-6 py-6 lg:hidden">
-          <div className="flex items-center justify-between">
-            <img src="/images/Logos/SAHM_Blanco_SAHM.svg" alt="SAHM" className="h-9 w-auto object-contain" />
-            <button
-              type="button"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold text-white"
-            >
-              Cerrar
-            </button>
-          </div>
-          <nav className="mt-12 flex flex-col gap-6">
-            {[
-              { href: '/', label: 'Inicio' },
-              { href: '/productos', label: 'Productos' },
-              { href: '/categorias', label: 'Categorías' },
-              { href: '/buscar', label: 'Buscar' },
-              { href: '/carrito', label: 'Pedido' },
-              { href: '/nosotros', label: 'Nosotros' },
-              { href: '/contacto', label: 'Contacto' },
-            ].map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                className="font-heading text-4xl font-extrabold uppercase italic text-white hover:text-sahm-yellow"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+      {/* Mobile full-screen menu — always in DOM, toggled via translate */}
+      <div
+        aria-hidden={!menuOpen}
+        className={`fixed inset-0 z-50 flex flex-col bg-sahm-purple px-6 py-6 lg:hidden
+          transform transition-transform duration-300 ease-out
+          ${menuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'}`}
+      >
+        <div className="flex items-center justify-between">
+          <img src="/images/Logos/SAHM_Blanco_SAHM.svg" alt="SAHM" className="h-9 w-auto object-contain" />
+          <button
+            type="button"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Cerrar menú"
+            className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+          >
+            Cerrar
+          </button>
         </div>
-      )}
+        <nav className="mt-12 flex flex-col gap-6">
+          {[
+            { href: '/', label: 'Inicio' },
+            { href: '/productos', label: 'Productos' },
+            { href: '/categorias', label: 'Categorías' },
+            { href: '/buscar', label: 'Buscar' },
+            { href: '/carrito', label: 'Pedido' },
+            { href: '/nosotros', label: 'Nosotros' },
+            { href: '/contacto', label: 'Contacto' },
+          ].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setMenuOpen(false)}
+              className="font-heading text-4xl font-extrabold uppercase italic text-white transition hover:text-sahm-yellow"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </header>
   )
 }

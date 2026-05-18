@@ -6,14 +6,23 @@ const CART_KEY = 'sahm_cart'
 const CartContext = createContext(null)
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState(() => {
-    if (typeof window === 'undefined') return []
-    try { return JSON.parse(localStorage.getItem(CART_KEY)) ?? [] } catch { return [] }
-  })
+  const [items, setItems] = useState([])
+  const [hasHydrated, setHasHydrated] = useState(false)
 
   useEffect(() => {
+    try {
+      setItems(JSON.parse(localStorage.getItem(CART_KEY)) ?? [])
+    } catch {
+      setItems([])
+    } finally {
+      setHasHydrated(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!hasHydrated) return
     localStorage.setItem(CART_KEY, JSON.stringify(items))
-  }, [items])
+  }, [hasHydrated, items])
 
   const addToCart = useCallback((productId, qty = 1) => {
     setItems(prev => {
@@ -40,7 +49,7 @@ export function CartProvider({ children }) {
   const totalItems = useMemo(() => items.reduce((sum, i) => sum + i.qty, 0), [items])
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQty, clearCart, totalItems }}>
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQty, clearCart, totalItems, hasHydrated }}>
       {children}
     </CartContext.Provider>
   )

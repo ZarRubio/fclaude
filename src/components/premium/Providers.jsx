@@ -23,14 +23,16 @@ export default function Providers({ children }) {
       smoothWheel: true,
     })
 
-    function raf(time) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
+    // Drive Lenis through GSAP's ticker so ScrollTrigger reads the same
+    // scroll position that Lenis is rendering — prevents trigger desync.
+    gsap.ticker.lagSmoothing(0)
+    const tick = time => lenis.raf(time * 1000)
+    gsap.ticker.add(tick)
 
-    const rafId = requestAnimationFrame(raf)
+    lenis.on('scroll', ScrollTrigger.update)
+
     return () => {
-      cancelAnimationFrame(rafId)
+      gsap.ticker.remove(tick)
       lenis.destroy()
     }
   }, [])

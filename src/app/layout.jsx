@@ -33,6 +33,20 @@ export const metadata = {
     url: 'https://sahm.pe',
     siteName: 'SAHM',
     type: 'website',
+    images: [
+      {
+        url: '/images/og-sahm.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'SAHM — Llantas, cámaras y repuestos para moto',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SAHM | Repuestos para moto',
+    description: 'Catálogo de llantas, cámaras y repuestos para motocicletas.',
+    images: ['/images/og-sahm.jpg'],
   },
 }
 

@@ -1,8 +1,6 @@
-import { CATALOG_PRODUCTS } from '../config/catalog'
+import { CATALOG_CATEGORIES, CATALOG_PRODUCTS } from '../config/catalog'
 
-export const featuredProductTypes = ['Llantas', 'Cámaras', 'Carburadores', 'Repuestos', 'Accesorios']
-
-export const premiumCategories = [
+const RAW_CATEGORIES = [
   {
     id: 'llantas',
     label: 'Llantas',
@@ -39,6 +37,12 @@ export const premiumCategories = [
     text: 'Productos para mantenimiento, seguridad y cuidado.',
   },
 ]
+
+export const premiumCategories = RAW_CATEGORIES.map(cat => ({
+  ...cat,
+  image: CATALOG_CATEGORIES.find(c => c.id === cat.id)?.image || '',
+  count: CATALOG_PRODUCTS.filter(p => p.category === (CATALOG_CATEGORIES.find(c => c.id === cat.id)?.name || cat.label)).length,
+}))
 
 export const heroProduct = CATALOG_PRODUCTS.find(product => product.id === 'llantas-moto-electrica-350-10-4pr') || CATALOG_PRODUCTS[0]
 

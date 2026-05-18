@@ -19,7 +19,7 @@ export default function ProductCard({ product, priority = false }) {
   }
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-sm transition hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-sahm-yellow/30 hover:shadow-xl hover:shadow-sahm-purple/10">
 
       {/* Image */}
       <Link href={product.productUrl} className="relative block overflow-hidden bg-gray-50">
@@ -30,7 +30,12 @@ export default function ProductCard({ product, priority = false }) {
           src={product.images[0].card}
           alt={label}
           loading={priority ? 'eager' : 'lazy'}
-          className="h-52 w-full object-contain p-6 transition duration-300 hover:scale-105"
+          className="h-52 w-full object-contain p-6 transition duration-500 group-hover:scale-105"
+        />
+        {/* Yellow accent stripe */}
+        <span
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 h-0.5 w-full origin-left scale-x-0 bg-sahm-yellow transition-transform duration-300 group-hover:scale-x-100"
         />
       </Link>
 
@@ -69,7 +74,7 @@ export default function ProductCard({ product, priority = false }) {
             <button
               type="button"
               onClick={handleAdd}
-              className="rounded-lg bg-sahm-yellow py-2.5 text-xs font-heading font-bold uppercase tracking-wide text-black transition hover:brightness-95"
+              className="rounded-lg bg-sahm-yellow py-2.5 text-xs font-heading font-bold uppercase tracking-wide text-black transition hover:brightness-95 active:scale-[0.97]"
             >
               Agregar
             </button>

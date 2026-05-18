@@ -2,80 +2,41 @@ import Link from 'next/link'
 import ProductCard from './ProductCard'
 import CategoryCard from './CategoryCard'
 import StatsTrustPanel from './StatsTrustPanel'
-import { bestSellers, catalogHighlights, featuredProductTypes, heroProduct, premiumCategories, testimonials } from '../../lib/premiumData'
+import HeroSection from './HeroSection'
+import { bestSellers, catalogHighlights, premiumCategories, testimonials } from '../../lib/premiumData'
 import { buildWhatsAppMessageUrl } from '../../config/site'
+
+function StarRating() {
+  return (
+    <div className="mb-3 flex gap-0.5" aria-label="5 estrellas">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 text-sahm-yellow" aria-hidden="true">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
+  )
+}
 
 export default function HomeExperience() {
   return (
     <>
-      <section className="bg-sahm-purple px-4 py-16 sm:px-6 lg:pb-16 lg:pt-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1fr_1fr]">
-          <div>
-            <span className="inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-widest text-sahm-yellow">
-              Repuestos para moto - Perú
-            </span>
-            <h1 className="mt-6 font-heading text-5xl font-extrabold uppercase italic leading-none text-white sm:text-6xl lg:text-7xl">
-              Llantas, cámaras y repuestos con stock real.
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70">
-              Catálogo profesional para motos, talleres y flotas. Precios claros, asesoría directa y despacho nacional.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/productos"
-                className="rounded-xl bg-sahm-yellow px-8 py-4 text-center font-heading text-sm font-bold uppercase tracking-wide text-black transition hover:brightness-95"
-              >
-                Ver catálogo
-              </Link>
-              <Link
-                href="/categorias"
-                className="rounded-xl border-2 border-white/25 px-8 py-4 text-center font-heading text-sm font-bold uppercase tracking-wide text-white transition hover:border-white/50 hover:bg-white/10"
-              >
-                Ver categorías
-              </Link>
-            </div>
-          </div>
+      {/* ── 3D Hero ── */}
+      <HeroSection />
 
-          <div className="flex justify-center">
-            <div className="relative w-full max-w-md rounded-2xl border border-white/15 bg-white/10 p-6 shadow-2xl backdrop-blur-sm">
-              <img
-                src={heroProduct.images[0].detail}
-                alt="Llanta SAHM"
-                className="h-72 w-full bg-white object-contain sm:h-96"
-              />
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {['Stock real', 'Asesoría', 'Despacho'].map(item => (
-                  <div key={item} className="rounded-xl bg-white/10 py-2 text-center text-xs font-heading font-bold uppercase tracking-wide text-white/75">
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
+      {/* ── Stats trust panel (below hero, same purple bg) ── */}
+      <section className="bg-sahm-purple px-4 pb-16 sm:px-6">
         <StatsTrustPanel />
       </section>
 
-      <section className="border-y border-sahm-yellow/40 bg-sahm-cream px-4 py-6 sm:px-6">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            {featuredProductTypes.map(type => (
-              <span key={type} className="font-heading text-base font-extrabold uppercase tracking-widest text-gray-400">
-                {type}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      {/* ── Category grid ── */}
       <section className="bg-sahm-cream px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8">
+          <div className="gsap-reveal mb-8">
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Líneas de producto</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Encuentra lo que necesitas.</h2>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="gsap-reveal grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {premiumCategories.map(category => (
               <CategoryCard key={category.id} category={category} />
             ))}
@@ -83,13 +44,14 @@ export default function HomeExperience() {
         </div>
       </section>
 
+      {/* ── Best sellers ── */}
       <section className="bg-sahm-cream px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8">
+          <div className="gsap-reveal mb-8">
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Más vendidos</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Referencias listas para salir.</h2>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="gsap-reveal grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {bestSellers.map((product, index) => (
               <ProductCard key={product.id} product={product} priority={index < 2} />
             ))}
@@ -105,10 +67,11 @@ export default function HomeExperience() {
         </div>
       </section>
 
+      {/* ── WhatsApp CTA ── */}
       <section className="bg-sahm-night px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-            <div>
+            <div className="gsap-reveal">
               <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-yellow">Asesoría directa</span>
               <h2 className="mt-3 font-heading text-4xl font-extrabold uppercase italic leading-tight text-white sm:text-5xl">
                 ¿No encuentras tu pieza?
@@ -125,7 +88,7 @@ export default function HomeExperience() {
                 Consultar por WhatsApp
               </a>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="gsap-reveal rounded-2xl border border-white/10 bg-white/5 p-6">
               {catalogHighlights.map(item => (
                 <p key={item} className="flex items-center gap-3 border-b border-white/10 py-3 text-sm font-bold text-white/70 last:border-0">
                   <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-sahm-yellow" />
@@ -137,15 +100,17 @@ export default function HomeExperience() {
         </div>
       </section>
 
+      {/* ── Testimonials ── */}
       <section className="bg-sahm-cream px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8 text-center">
+          <div className="gsap-reveal mb-8 text-center">
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Clientes</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Lo que dicen.</h2>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="gsap-reveal grid gap-4 md:grid-cols-3">
             {testimonials.map(item => (
               <article key={item.name} className="rounded-2xl border-2 border-gray-100 bg-white p-6 shadow-sm">
+                <StarRating />
                 <p className="text-base leading-relaxed text-gray-700">"{item.quote}"</p>
                 <div className="mt-5 border-t border-gray-100 pt-4">
                   <p className="font-heading text-sm font-extrabold uppercase text-black">{item.name}</p>

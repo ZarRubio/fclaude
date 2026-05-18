@@ -1,8 +1,7 @@
-import Link from 'next/link'
-import ProductCard from './ProductCard'
-import CategoryCard from './CategoryCard'
 import StatsTrustPanel from './StatsTrustPanel'
 import HeroSection from './HeroSection'
+import BestSellersCarousel from './BestSellersCarousel'
+import CategoryMosaic from './CategoryMosaic'
 import { bestSellers, catalogHighlights, premiumCategories, testimonials } from '../../lib/premiumData'
 import { buildWhatsAppMessageUrl } from '../../config/site'
 
@@ -36,11 +35,7 @@ export default function HomeExperience() {
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Líneas de producto</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Encuentra lo que necesitas.</h2>
           </div>
-          <div className="gsap-reveal grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {premiumCategories.map(category => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
-          </div>
+          <CategoryMosaic categories={premiumCategories} />
         </div>
       </section>
 
@@ -51,19 +46,7 @@ export default function HomeExperience() {
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Más vendidos</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Referencias listas para salir.</h2>
           </div>
-          <div className="gsap-reveal grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {bestSellers.map((product, index) => (
-              <ProductCard key={product.id} product={product} priority={index < 2} />
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <Link
-              href="/productos"
-              className="inline-block rounded-xl border-2 border-gray-200 bg-white px-8 py-3 font-heading text-sm font-bold uppercase tracking-wide text-gray-700 transition hover:border-gray-400 hover:text-black"
-            >
-              Ver todo el catálogo
-            </Link>
-          </div>
+          <BestSellersCarousel products={bestSellers} />
         </div>
       </section>
 

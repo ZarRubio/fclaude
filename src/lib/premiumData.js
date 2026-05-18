@@ -51,7 +51,18 @@ export const premiumCategories = RAW_CATEGORIES.map(cat => {
 
 export const heroProduct = CATALOG_PRODUCTS.find(product => product.id === 'llantas-moto-electrica-350-10-4pr') || CATALOG_PRODUCTS[0]
 
-export const bestSellers = CATALOG_PRODUCTS.slice(0, 8)
+export const bestSellers = [
+  'llantas-motos-110-90-13-56l',
+  'camaras-motos-400-12-tr13',
+  'carburadores-pz26',
+  'llantas-moto-electrica-350-10-4pr',
+  'camaras-motos-300-12-tr87',
+  'carburadores-pz19',
+  'llantas-cargueros-electricos-400-12-8pr',
+  'camaras-bicicletas-29x195235',
+]
+  .map(id => CATALOG_PRODUCTS.find(product => product.id === id))
+  .filter(Boolean)
 
 export const catalogHighlights = [
   'Búsqueda por medida, aro y tipo de uso',

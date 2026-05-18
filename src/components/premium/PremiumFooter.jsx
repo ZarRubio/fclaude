@@ -24,8 +24,6 @@ export default function PremiumFooter() {
           ['Llantas', '/categorias/llantas'],
           ['Cámaras', '/categorias/camaras'],
           ['Carburadores', '/categorias/carburadores'],
-          ['Repuestos', '/categorias/repuestos'],
-          ['Accesorios', '/categorias/accesorios'],
         ]} />
 
         <FooterColumn title="SAHM" items={[

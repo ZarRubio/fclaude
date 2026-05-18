@@ -4,8 +4,6 @@ import { useMemo, useState } from 'react'
 import ProductCard from './ProductCard'
 import { getProductLabel } from '../../config/catalog'
 
-const CATEGORIES = ['Todos', 'Llantas', 'Cámaras', 'Carburadores', 'Repuestos', 'Accesorios']
-
 function normalize(value) {
   return value
     .normalize('NFD')
@@ -16,6 +14,7 @@ function normalize(value) {
 export default function ProductsClient({ products }) {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('Todos')
+  const categories = useMemo(() => ['Todos', ...new Set(products.map(product => product.category))], [products])
 
   const filtered = useMemo(() => {
     const query = normalize(search.trim())
@@ -46,7 +45,7 @@ export default function ProductsClient({ products }) {
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
-        {CATEGORIES.map(category => (
+        {categories.map(category => (
           <button
             key={category}
             type="button"
@@ -75,7 +74,7 @@ export default function ProductsClient({ products }) {
       ) : (
         <div className="mt-16 py-12 text-center">
           <p className="font-heading text-2xl font-bold uppercase text-gray-300">Sin resultados</p>
-          <p className="mt-2 text-gray-400">Intenta con otro término o categoría.</p>
+          <p className="mt-2 text-gray-400">Intenta con otro termino o categoria.</p>
         </div>
       )}
     </div>

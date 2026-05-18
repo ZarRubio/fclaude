@@ -38,11 +38,16 @@ const RAW_CATEGORIES = [
   },
 ]
 
-export const premiumCategories = RAW_CATEGORIES.map(cat => ({
-  ...cat,
-  image: CATALOG_CATEGORIES.find(c => c.id === cat.id)?.image || '',
-  count: CATALOG_PRODUCTS.filter(p => p.category === (CATALOG_CATEGORIES.find(c => c.id === cat.id)?.name || cat.label)).length,
-}))
+export const premiumCategories = RAW_CATEGORIES.map(cat => {
+  const catalogCategory = CATALOG_CATEGORIES.find(c => c.id === cat.id)
+  const count = CATALOG_PRODUCTS.filter(p => p.category === (catalogCategory?.name || cat.label)).length
+
+  return {
+    ...cat,
+    image: catalogCategory?.image || '',
+    count,
+  }
+}).filter(category => category.count > 0)
 
 export const heroProduct = CATALOG_PRODUCTS.find(product => product.id === 'llantas-moto-electrica-350-10-4pr') || CATALOG_PRODUCTS[0]
 

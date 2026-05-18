@@ -37,7 +37,7 @@ export default function StatsTrustPanel() {
   }, [])
 
   return (
-    <div ref={ref} className="mx-auto mt-12 max-w-7xl">
+    <div ref={ref} className="mx-auto -mt-8 max-w-7xl sm:-mt-10 lg:-mt-12">
       <div className="grid gap-4 rounded-2xl border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/15 backdrop-blur-sm lg:grid-cols-[0.82fr_1.18fr] lg:items-stretch">
         <div className="grid content-center gap-2 rounded-xl bg-sahm-night/25 p-4">
           {chips.map(chip => (

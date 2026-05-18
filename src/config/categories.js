@@ -33,7 +33,7 @@ export const CATEGORIES = [
     description: 'Repuestos seleccionados para mantenimiento, reparación y funcionamiento.',
     cta: 'Ver catálogo de repuestos',
     waMessage: 'Hola, quiero cotizar repuestos SAHM. La pieza o referencia es: ',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 'accesorios',
@@ -42,10 +42,10 @@ export const CATEGORIES = [
     description: 'Productos complementarios para cuidado, seguridad y mantenimiento.',
     cta: 'Ver accesorios',
     waMessage: 'Hola, quiero cotizar accesorios SAHM. El producto o referencia es: ',
-    enabled: true,
+    enabled: false,
   },
 ]
 
 export function getCategoryById(id) {
-  return CATEGORIES.find(cat => cat.id === id)
+  return CATEGORIES.find(cat => cat.id === id && cat.enabled)
 }

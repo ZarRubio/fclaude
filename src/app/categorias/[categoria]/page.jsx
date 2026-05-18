@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import CategoryClient from '../../../components/premium/CategoryClient'
 import { CATEGORIES, getCategoryById } from '../../../config/categories'
 import { CATALOG_CATEGORIES, CATALOG_PRODUCTS, getSubcategories } from '../../../config/catalog'
@@ -6,12 +7,14 @@ import { CATALOG_CATEGORIES, CATALOG_PRODUCTS, getSubcategories } from '../../..
 export const dynamicParams = false
 
 export function generateStaticParams() {
-  return CATEGORIES.map(category => ({ categoria: category.id }))
+  return CATEGORIES.filter(category => category.enabled).map(category => ({ categoria: category.id }))
 }
 
 export async function generateMetadata({ params }) {
   const { categoria } = await params
   const category = getCategoryById(categoria)
+  if (!category) notFound()
+
   const label = category?.name || categoria
   return {
     title: label,

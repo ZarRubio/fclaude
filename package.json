@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "optimize:images": "node scripts/optimize-catalog-images.mjs",
+    "prebuild": "node scripts/clean-output.mjs",
     "build": "next build",
     "start": "next start",
     "preview": "serve out"

@@ -25,7 +25,7 @@ export default function HomeExperience() {
       <HeroSection />
 
       {/* ── Stats trust panel (below hero, same purple bg) ── */}
-      <section className="bg-sahm-purple px-4 pb-16 sm:px-6">
+      <section className="relative z-10 bg-sahm-purple px-4 pb-16 sm:px-6">
         <StatsTrustPanel />
       </section>
 

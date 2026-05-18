@@ -25,7 +25,12 @@ export const metadata = {
   },
   description: 'Llantas, cámaras y repuestos para moto. Stock real, precios claros y despacho nacional.',
   icons: {
-    icon: '/images/Logos/ISOTIPO_SAHM.svg',
+    icon: [
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/images/Logos/ISOTIPO_SAHM.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     title: 'SAHM | Repuestos para moto',
@@ -35,10 +40,10 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/og-sahm.jpg',
+        url: '/images/og-sahm.png',
         width: 1200,
         height: 630,
-        alt: 'SAHM — Llantas, cámaras y repuestos para moto',
+        alt: 'SAHM - Llantas, cámaras y repuestos para moto',
       },
     ],
   },
@@ -46,7 +51,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'SAHM | Repuestos para moto',
     description: 'Catálogo de llantas, cámaras y repuestos para motocicletas.',
-    images: ['/images/og-sahm.jpg'],
+    images: ['/images/og-sahm.png'],
   },
 }
 

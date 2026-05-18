@@ -18,7 +18,7 @@ const inter = Inter({
 })
 
 export const metadata = {
-  metadataBase: new URL('https://sahm.pe'),
+  metadataBase: new URL('https://www.sahmparts.com'),
   title: {
     default: 'SAHM | Repuestos para moto',
     template: '%s | SAHM',
@@ -35,7 +35,7 @@ export const metadata = {
   openGraph: {
     title: 'SAHM | Repuestos para moto',
     description: 'Catálogo de llantas, cámaras y repuestos para motocicletas.',
-    url: 'https://sahm.pe',
+    url: 'https://www.sahmparts.com',
     siteName: 'SAHM',
     type: 'website',
     images: [

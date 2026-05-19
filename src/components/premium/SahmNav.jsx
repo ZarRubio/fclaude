@@ -138,7 +138,7 @@ export default function SahmNav() {
 
       {/* Mobile full-screen menu — always in DOM, toggled via translate */}
       <div
-        aria-hidden={!menuOpen}
+        inert={menuOpen ? undefined : ''}
         className={`fixed inset-0 z-50 flex flex-col bg-sahm-purple px-6 py-6 lg:hidden
           transform transition-transform duration-300 ease-out
           ${menuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'}`}

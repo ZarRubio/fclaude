@@ -7,8 +7,8 @@ export default {
         600: '600ms',
       },
       colors: {
-        'sahm-yellow': '#F0A500',
-        'sahm-purple': '#2C1A6E',
+        'sahm-yellow': '#F5C000',
+        'sahm-purple': '#3D2785',
         'sahm-night':  '#120B2E',
         'sahm-lilac': '#F5F0FA',
         'sahm-cream': '#FFF4C7',

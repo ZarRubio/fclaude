@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -53,26 +54,33 @@ export default function ProductDetailClient({ product, related }) {
 
   return (
     <>
-    <section className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+    <section className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
 
       {/* Image gallery */}
-      <div className="rounded-2xl border-2 border-gray-100 bg-white p-4 shadow-sm">
+      <div className="min-w-0 overflow-hidden rounded-2xl border-2 border-gray-100 bg-white p-3 shadow-sm sm:p-4">
         <div
-          className="relative grid min-h-[360px] place-items-center overflow-hidden rounded-xl bg-gray-50 sm:min-h-[480px]"
+          className="relative aspect-square overflow-hidden rounded-xl bg-gray-50 sm:aspect-[4/3] lg:min-h-[480px]"
           tabIndex={0}
           role="region"
           aria-label={`Galería de imágenes de ${label}`}
           onKeyDown={handleGalleryKeyDown}
         >
-          <motion.img
+          <motion.div
             key={product.images[activeImage].detail}
-            src={product.images[activeImage].detail}
-            alt={label}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="max-h-[60vh] w-full object-contain p-8"
-          />
+            className="absolute inset-0"
+          >
+            <Image
+              src={product.images[activeImage].detail}
+              alt={label}
+              fill
+              loading={activeImage === 0 ? 'eager' : 'lazy'}
+              sizes="(min-width: 1024px) 54vw, (min-width: 640px) 92vw, 100vw"
+              className="object-contain p-5 sm:p-8"
+            />
+          </motion.div>
           {hasMultipleImages && (
             <>
               <button
@@ -104,7 +112,7 @@ export default function ProductDetailClient({ product, related }) {
           )}
         </div>
         {hasMultipleImages && (
-          <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+          <div className="mt-4 flex max-w-full gap-3 overflow-x-auto overscroll-x-contain pb-1">
             {product.images.map((image, index) => (
               <button
                 key={image.detail}
@@ -117,7 +125,7 @@ export default function ProductDetailClient({ product, related }) {
                     : 'border-gray-200 hover:border-gray-400'
                 }`}
               >
-                <img src={image.detail} alt="" className="h-full w-full object-contain p-2" />
+                <Image src={image.detail} alt="" fill sizes="96px" className="object-contain p-2" />
                 {activeImage === index && (
                   <span className="absolute inset-x-0 bottom-0 h-1 bg-sahm-yellow" />
                 )}
@@ -128,7 +136,7 @@ export default function ProductDetailClient({ product, related }) {
       </div>
 
       {/* Purchase area */}
-      <aside className="flex flex-col justify-start pt-2">
+      <aside className="min-w-0 flex flex-col justify-start pt-2">
         <Link
           href="/productos"
           className="w-fit text-sm font-bold text-gray-400 transition hover:text-black"

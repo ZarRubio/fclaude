@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '../../context/CartContext'
 import { CATALOG_PRODUCTS, getProductLabel } from '../../config/catalog'
@@ -67,11 +68,15 @@ export default function CartClient() {
       <div className="mt-6 grid gap-3">
         {cartProducts.map(({ product, qty }) => (
           <article key={product.id} className="grid gap-4 rounded-2xl border-2 border-gray-100 bg-white p-4 shadow-sm sm:grid-cols-[80px_1fr_auto] sm:items-center">
-            <img
-              src={product.images[0].card}
-              alt={getProductLabel(product, 'es')}
-              className="h-20 w-20 rounded-xl bg-gray-50 object-contain p-2"
-            />
+            <div className="relative h-20 w-20 rounded-xl bg-gray-50">
+              <Image
+                src={product.images[0].card}
+                alt={getProductLabel(product, 'es')}
+                fill
+                sizes="80px"
+                className="object-contain p-2"
+              />
+            </div>
             <div>
               <Link href={product.productUrl} className="font-heading text-base font-extrabold uppercase text-black hover:text-sahm-purple">
                 {getProductLabel(product, 'es')}

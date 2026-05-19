@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function CategoryCard({ category }) {
@@ -9,11 +10,12 @@ export default function CategoryCard({ category }) {
       {/* Image panel */}
       <div className="relative overflow-hidden bg-gray-50" style={{ aspectRatio: '4/3' }}>
         {category.image ? (
-          <img
+          <Image
             src={category.image}
             alt={category.label}
-            loading="lazy"
-            className="h-full w-full object-contain p-6 transition duration-500 group-hover:scale-105"
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-contain p-6 transition duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-sahm-purple/10 to-sahm-yellow/10">

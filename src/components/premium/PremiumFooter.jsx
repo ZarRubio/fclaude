@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { buildWhatsAppMessageUrl } from '../../config/site'
 
@@ -6,7 +7,7 @@ export default function PremiumFooter() {
     <footer className="bg-sahm-purple px-4 py-14 sm:px-6">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]">
         <div>
-          <img src="/images/Logos/SAHM_Blanco_SAHM.svg" alt="SAHM" width="160" height="48" className="h-10 w-auto object-contain" />
+          <Image src="/images/Logos/SAHM_Blanco_SAHM.svg" alt="SAHM" width={160} height={48} className="h-10 w-auto object-contain" style={{ width: 'auto' }} />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">
             Llantas, cámaras y repuestos para motocicletas. Stock real, asesoría directa y despacho nacional.
           </p>

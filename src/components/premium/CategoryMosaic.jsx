@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function CategoryMosaic({ categories }) {
@@ -30,13 +31,17 @@ function CategoryPanel({ category, featured = false }) {
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/55 to-transparent" />
 
       {category.image && (
-        <img
-          src={category.image}
-          alt={category.label}
-          className={`absolute right-0 top-1/2 z-0 -translate-y-1/2 object-contain opacity-95 transition duration-700 group-hover:scale-105 ${
-            featured ? 'h-[86%] w-[70%] p-4 sm:w-[62%]' : 'h-[82%] w-[68%] p-4'
-          }`}
-        />
+        <div className={`absolute right-0 top-1/2 z-0 -translate-y-1/2 transition duration-700 group-hover:scale-105 ${
+          featured ? 'h-[86%] w-[70%] p-4 sm:w-[62%]' : 'h-[82%] w-[68%] p-4'
+        }`}>
+          <Image
+            src={category.image}
+            alt={category.label}
+            fill
+            sizes={featured ? '(min-width: 1024px) 45vw, 70vw' : '(min-width: 1024px) 24vw, (min-width: 640px) 34vw, 68vw'}
+            className="object-contain opacity-95"
+          />
+        </div>
       )}
 
       <div className="absolute inset-0 bg-gradient-to-r from-sahm-purple via-sahm-purple/65 to-transparent" />

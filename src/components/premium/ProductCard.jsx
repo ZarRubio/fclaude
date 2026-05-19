@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '../../context/CartContext'
@@ -22,15 +23,17 @@ export default function ProductCard({ product, priority = false }) {
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-sahm-yellow/30 hover:shadow-xl hover:shadow-sahm-purple/10">
 
       {/* Image */}
-      <Link href={product.productUrl} className="relative block overflow-hidden bg-gray-50">
+      <Link href={product.productUrl} className="relative block h-52 overflow-hidden bg-gray-50">
         <span className="absolute left-3 top-3 z-10 rounded-full bg-sahm-purple px-3 py-1 text-[10px] font-heading font-bold uppercase tracking-wider text-white">
           {product.category}
         </span>
-        <img
+        <Image
           src={product.images[0].card}
           alt={label}
-          loading={priority ? 'eager' : 'lazy'}
-          className="h-52 w-full object-contain p-6 transition duration-500 group-hover:scale-105"
+          fill
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+          priority={priority}
+          className="object-contain p-6 transition duration-500 group-hover:scale-105"
         />
         {/* Yellow accent stripe */}
         <span

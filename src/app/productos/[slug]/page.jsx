@@ -28,8 +28,8 @@ export default async function ProductPage({ params }) {
     .slice(0, 4)
 
   return (
-    <main className="min-h-screen bg-sahm-cream px-4 pb-24 pt-8 sm:px-6">
-      <div className="mx-auto max-w-7xl">
+    <main className="min-h-screen overflow-x-hidden bg-sahm-cream px-4 pb-24 pt-8 sm:px-6">
+      <div className="mx-auto w-full max-w-7xl">
         <ProductDetailClient product={product} related={related} />
         {related.length > 0 && (
           <section className="mt-16">

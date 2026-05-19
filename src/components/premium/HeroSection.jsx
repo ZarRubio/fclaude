@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { buildWhatsAppMessageUrl } from '../../config/site'
@@ -49,6 +50,19 @@ const SLIDES = [
 ]
 
 /* ── Tilt 3-D card ──────────────────────────────────────────────── */
+const BENEFITS = [
+  {
+    id: 'stock',
+    label: 'Stock confirmado',
+    description: 'Validamos disponibilidad antes de cerrar tu cotización.',
+  },
+  {
+    id: 'delivery',
+    label: 'Despacho nacional',
+    description: 'Coordinamos envíos para Lima y provincias según tu pedido.',
+  },
+]
+
 function TiltCard({ children, className = '' }) {
   const ref = useRef(null)
   function onMove(e) {
@@ -79,31 +93,29 @@ function GlowOrb({ className = '' }) {
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const [current, setCurrent] = useState(0)
-  const [animating, setAnimating] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const [activeBenefit, setActiveBenefit] = useState(BENEFITS[0].id)
   const timerRef = useRef(null)
+  const touchStartXRef = useRef(null)
 
   const goTo = useCallback((idx) => {
-    if (animating) return
-    setAnimating(true)
-    setTimeout(() => {
-      setCurrent(idx)
-      setAnimating(false)
-    }, 280)
-  }, [animating])
+    setCurrent(idx)
+  }, [])
 
   const next = useCallback(() => {
-    goTo((current + 1) % SLIDES.length)
-  }, [current, goTo])
+    setCurrent(index => (index + 1) % SLIDES.length)
+  }, [])
 
   const prev = useCallback(() => {
-    goTo((current - 1 + SLIDES.length) % SLIDES.length)
-  }, [current, goTo])
+    setCurrent(index => (index - 1 + SLIDES.length) % SLIDES.length)
+  }, [])
 
   // Auto-advance every 4 s
   useEffect(() => {
+    if (paused) return undefined
     timerRef.current = setInterval(next, 4000)
     return () => clearInterval(timerRef.current)
-  }, [next])
+  }, [next, paused])
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 60)
@@ -111,6 +123,37 @@ export default function HeroSection() {
   }, [])
 
   const slide = SLIDES[current]
+  const selectedBenefit = BENEFITS.find(benefit => benefit.id === activeBenefit) || BENEFITS[0]
+
+  const handleCarouselKeyDown = event => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault()
+      prev()
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault()
+      next()
+    }
+  }
+
+  const handleTouchStart = event => {
+    touchStartXRef.current = event.touches[0]?.clientX ?? null
+    setPaused(true)
+  }
+
+  const handleTouchEnd = event => {
+    const startX = touchStartXRef.current
+    touchStartXRef.current = null
+    if (startX === null) return
+
+    const endX = event.changedTouches[0]?.clientX ?? startX
+    const deltaX = endX - startX
+    if (Math.abs(deltaX) < 42) return
+
+    event.preventDefault()
+    if (deltaX > 0) prev()
+    else next()
+  }
 
   return (
     <>
@@ -121,7 +164,6 @@ export default function HeroSection() {
         @keyframes fade-up-hero{ from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
         @keyframes slide-in    { from{opacity:0;transform:scale(0.94) translateY(12px)} to{opacity:1;transform:scale(1) translateY(0)} }
         .carousel-img-enter { animation: slide-in 0.32s ease-out both; }
-        .carousel-img-exit  { opacity:0; transform:scale(0.94); transition:opacity .28s,transform .28s; }
       `}</style>
 
       <section className="relative overflow-hidden bg-sahm-purple px-4 py-16 sm:px-6 lg:pb-20 lg:pt-28">
@@ -153,7 +195,7 @@ export default function HeroSection() {
             <h1 className="mt-6 font-heading text-5xl font-extrabold uppercase italic leading-none text-white sm:text-6xl lg:text-7xl"
               style={{ textShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
               Llantas,{' '}
-              <span className="text-sahm-yellow" style={{ WebkitTextStroke: '1px rgba(240,165,0,0.4)' }}>
+              <span className="text-sahm-yellow" style={{ WebkitTextStroke: '1px rgba(245,192,0,0.4)' }}>
                 cámaras
               </span>{' '}
               y repuestos con stock real.
@@ -170,7 +212,7 @@ export default function HeroSection() {
               style={{ animation: mounted ? 'fade-up-hero 0.6s 0.2s ease-out both' : 'none', opacity: mounted ? 1 : 0 }}>
               <Link id="hero-cta-catalogo" href="/productos"
                 className="group relative overflow-hidden rounded-2xl px-8 py-4 text-center font-heading text-sm font-bold uppercase tracking-widest text-black shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-100"
-                style={{ background:'linear-gradient(135deg,#f0a500 0%,#ffd060 50%,#f0a500 100%)', backgroundSize:'200% auto', animation:'shimmer-btn 3s linear infinite', boxShadow:'0 8px 32px rgba(240,165,0,0.35),inset 0 1px 0 rgba(255,255,255,0.3)' }}>
+                style={{ background:'linear-gradient(135deg,#f5c000 0%,#ffdc57 50%,#f5c000 100%)', backgroundSize:'200% auto', animation:'shimmer-btn 3s linear infinite', boxShadow:'0 8px 32px rgba(245,192,0,0.35),inset 0 1px 0 rgba(255,255,255,0.3)' }}>
                 <span aria-hidden="true" className="pointer-events-none absolute inset-0 translate-x-[-100%] skew-x-[-20deg] bg-white/20 transition-transform duration-500 group-hover:translate-x-[200%]" />
                 <span className="relative flex items-center justify-center gap-2">
                   <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0">
@@ -208,25 +250,44 @@ export default function HeroSection() {
               <div aria-hidden="true" className="pointer-events-none absolute -inset-8 rounded-full border border-sahm-yellow/10" />
 
               {/* card body */}
-              <div className="relative rounded-3xl border border-white/20 bg-white/10 p-5 shadow-2xl backdrop-blur-md">
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-sahm-yellow/5 via-transparent to-purple-500/10" />
+              <div
+                className="relative rounded-3xl border border-white/20 bg-white/10 p-5 shadow-2xl backdrop-blur-md"
+                tabIndex={0}
+                role="region"
+                aria-label="Productos destacados"
+                onKeyDown={handleCarouselKeyDown}
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+                onFocus={() => setPaused(true)}
+                onBlur={event => {
+                  if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false)
+                }}
+              >
+                <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-sahm-yellow/5 via-transparent to-purple-500/10" />
 
                 {/* image area */}
                 <div className="relative flex h-72 items-center justify-center overflow-hidden rounded-2xl bg-white sm:h-80"
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
                   style={{ boxShadow: 'inset 0 2px 20px rgba(0,0,0,0.08)' }}>
 
-                  <img
-                    key={current}
-                    src={slide.img}
-                    alt={slide.label}
-                    onError={e => { e.currentTarget.src = slide.fallback }}
-                    className={`h-full w-full object-contain p-4 ${animating ? 'carousel-img-exit' : 'carousel-img-enter'}`}
-                    style={{ animation: animating ? 'none' : 'hero-float 4s ease-in-out infinite' }}
-                  />
+                  <Link href={slide.href} className="absolute inset-0" aria-label={`Ver ${slide.label}`}>
+                    <Image
+                      key={current}
+                      src={slide.img}
+                      alt={slide.label}
+                      fill
+                      sizes="(min-width: 1024px) 384px, 90vw"
+                      onError={e => { e.currentTarget.src = slide.fallback }}
+                      priority
+                      className="carousel-img-enter object-contain p-4"
+                      style={{ animation: 'slide-in 0.32s ease-out both, hero-float 4s ease-in-out infinite' }}
+                    />
+                  </Link>
 
                   {/* category label badge */}
                   <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-sahm-purple/90 px-3 py-1 font-heading text-xs font-bold uppercase tracking-widest text-sahm-yellow backdrop-blur-sm shadow-lg">
-                    <span>{slide.badge}</span>
+                    <span aria-hidden="true" className="h-2 w-2 rounded-full bg-sahm-yellow" />
                     {slide.label}
                   </span>
 
@@ -244,8 +305,11 @@ export default function HeroSection() {
                 {/* ── carousel controls ── */}
                 <div className="mt-3 flex items-center justify-between gap-3">
                   {/* prev */}
-                  <button onClick={prev} aria-label="Anterior"
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 active:scale-95">
+                  <button
+                    type="button"
+                    onClick={prev}
+                    aria-label="Anterior"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 active:scale-95">
                     <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
                       <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
@@ -254,14 +318,24 @@ export default function HeroSection() {
                   {/* dots */}
                   <div className="flex gap-1.5">
                     {SLIDES.map((_, i) => (
-                      <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}
-                        className={`rounded-full transition-all duration-300 ${i === current ? 'h-2 w-6 bg-sahm-yellow' : 'h-2 w-2 bg-white/30 hover:bg-white/60'}`} />
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => goTo(i)}
+                        aria-label={`Slide ${i + 1}`}
+                        aria-current={i === current ? 'true' : undefined}
+                        className="grid min-h-11 min-w-8 place-items-center rounded-full">
+                        <span className={`block h-2 rounded-full transition-all duration-300 ${i === current ? 'w-6 bg-sahm-yellow' : 'w-2 bg-white/30 hover:bg-white/60'}`} />
+                      </button>
                     ))}
                   </div>
 
                   {/* next */}
-                  <button onClick={next} aria-label="Siguiente"
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 active:scale-95">
+                  <button
+                    type="button"
+                    onClick={next}
+                    aria-label="Siguiente"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 active:scale-95">
                     <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
                       <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                     </svg>
@@ -270,24 +344,41 @@ export default function HeroSection() {
 
                 {/* trust strip */}
                 <div className="mt-3 grid grid-cols-2 gap-2">
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2.5 backdrop-blur-sm">
-                    <svg className="h-4 w-4 shrink-0 text-sahm-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                  <button
+                    type="button"
+                    aria-pressed={activeBenefit === 'stock'}
+                    onClick={() => setActiveBenefit('stock')}
+                    className={`flex min-h-11 items-center gap-2 rounded-xl px-3 py-2.5 text-left backdrop-blur-sm transition ${
+                      activeBenefit === 'stock' ? 'bg-sahm-yellow text-sahm-purple' : 'bg-white/10 text-white/80 hover:bg-white/15'
+                    }`}>
+                    <svg className={`h-4 w-4 shrink-0 ${activeBenefit === 'stock' ? 'text-sahm-purple' : 'text-sahm-yellow'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
                     </svg>
-                    <span className="font-heading text-[10px] font-bold uppercase tracking-widest text-white/80">Stock confirmado</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2.5 backdrop-blur-sm">
-                    <svg className="h-4 w-4 shrink-0 text-sahm-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <span className="font-heading text-[10px] font-bold uppercase tracking-widest">Stock confirmado</span>
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={activeBenefit === 'delivery'}
+                    onClick={() => setActiveBenefit('delivery')}
+                    className={`flex min-h-11 items-center gap-2 rounded-xl px-3 py-2.5 text-left backdrop-blur-sm transition ${
+                      activeBenefit === 'delivery' ? 'bg-sahm-yellow text-sahm-purple' : 'bg-white/10 text-white/80 hover:bg-white/15'
+                    }`}>
+                    <svg className={`h-4 w-4 shrink-0 ${activeBenefit === 'delivery' ? 'text-sahm-purple' : 'text-sahm-yellow'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 6h12v10H3zM15 10h4l2 3v3h-6z" /><circle cx="7" cy="18" r="2" /><circle cx="18" cy="18" r="2" />
                     </svg>
-                    <span className="font-heading text-[10px] font-bold uppercase tracking-widest text-white/80">Despacho nacional</span>
-                  </div>
+                    <span className="font-heading text-[10px] font-bold uppercase tracking-widest">Despacho nacional</span>
+                  </button>
+                </div>
+
+                <div className="mt-2 rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-xs leading-relaxed text-white/75">
+                  <span className="font-heading font-extrabold uppercase tracking-widest text-sahm-yellow">{selectedBenefit.label}: </span>
+                  {selectedBenefit.description}
                 </div>
 
                 {/* WhatsApp CTA */}
-                <a href={buildWhatsAppMessageUrl('Hola, quiero consultar un producto SAHM.')}
+                <a href={buildWhatsAppMessageUrl(`Hola, quiero consultar ${slide.label} SAHM - ${slide.sub}.`)}
                   target="_blank" rel="noopener noreferrer"
-                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-green-500/90 py-3 font-heading text-xs font-bold uppercase tracking-widest text-white transition hover:bg-green-500">
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-green-500/90 py-3 font-heading text-xs font-bold uppercase tracking-widest text-white transition hover:bg-green-500 active:scale-[0.98]">
                   <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>

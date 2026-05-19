@@ -5,8 +5,8 @@
 :root {
   --font-heading: 'Barlow Condensed', sans-serif;
   --font-body: 'Inter', sans-serif;
-  --sahm-yellow: #f0a500;
-  --sahm-purple: #2c1a6e;
+  --sahm-yellow: #f5c000;
+  --sahm-purple: #3d2785;
   --sahm-night: #120b2e;
   --ink: #f8fafc;
   --page: #ffffff;
@@ -18,7 +18,9 @@
 
 html,
 body {
+  width: 100%;
   min-height: 100%;
+  overflow-x: clip;
 }
 
 html {
@@ -31,7 +33,6 @@ html {
 
 body {
   margin: 0;
-  overflow-x: hidden;
   font-family: var(--font-body), 'Inter', sans-serif;
   line-height: 1.5;
   color: #111;
@@ -63,8 +64,45 @@ input {
   font: inherit;
 }
 
+button:not(:disabled),
+a[href],
+[role='button'] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:where(a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])):focus-visible {
+  outline: 3px solid var(--sahm-yellow);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 9999;
+  transform: translateY(-150%);
+  border-radius: 0.75rem;
+  background: var(--sahm-purple);
+  color: white;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-heading), 'Barlow Condensed', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 ::selection {
-  background: rgba(240, 165, 0, 0.28);
+  background: rgba(245, 192, 0, 0.28);
   color: #111;
 }
 

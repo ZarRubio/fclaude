@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import Image from 'next/image'
+import { useId, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCart } from '../../context/CartContext'
@@ -17,20 +18,28 @@ const navLinks = [
 export default function SahmNav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownId = useId()
   const pathname = usePathname()
   const { totalItems, hasHydrated } = useCart()
   const subcategories = PRODUCT_SUBCATEGORIES.es
 
   const isActive = href => href === '/' ? pathname === '/' : pathname.startsWith(href)
+  const closeDropdownOnBlur = event => {
+    if (!event.currentTarget.contains(event.relatedTarget)) setDropdownOpen(false)
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-sahm-purple/20 bg-sahm-yellow shadow-md">
       <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="shrink-0">
-          <img
-            src="/images/Logos/SAHM_Blanco_SAHM.svg"
+          <Image
+            src="/images/Logos/SAHM_Azul_SAHM.svg"
             alt="SAHM"
-            className="h-9 w-auto object-contain brightness-0"
+            width={132}
+            height={36}
+            className="h-9 w-auto object-contain"
+            style={{ width: 'auto' }}
+            priority
           />
         </Link>
 
@@ -42,8 +51,22 @@ export default function SahmNav() {
                 className="relative"
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
+                onBlur={closeDropdownOnBlur}
+                onKeyDown={event => {
+                  if (event.key === 'Escape') {
+                    setDropdownOpen(false)
+                    event.currentTarget.querySelector('button')?.focus()
+                  }
+                }}
               >
-                <Link href={link.href} className="group inline-flex items-center gap-1.5 py-5 font-heading text-sm font-extrabold uppercase tracking-widest text-sahm-purple">
+                <button
+                  type="button"
+                  aria-expanded={dropdownOpen}
+                  aria-controls={dropdownId}
+                  onClick={() => setDropdownOpen(open => !open)}
+                  onFocus={() => setDropdownOpen(true)}
+                  className="group relative inline-flex items-center gap-1.5 py-5 font-heading text-sm font-extrabold uppercase tracking-widest text-sahm-purple"
+                >
                   {link.label}
                   <svg
                     aria-hidden="true"
@@ -53,14 +76,21 @@ export default function SahmNav() {
                   >
                     <path d="M5.3 7.3a1 1 0 0 1 1.4 0L10 10.58l3.3-3.3a1 1 0 1 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 0-1.42z" />
                   </svg>
-                  <span className={`absolute -bottom-px left-0 h-0.5 bg-sahm-purple transition-all duration-300 ${isActive('/productos') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
-                </Link>
+                  <span className={`absolute -bottom-px left-0 h-0.5 bg-sahm-purple transition-all duration-300 ${isActive(link.href) ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                </button>
 
                 <div
+                  id={dropdownId}
                   className={`absolute left-1/2 top-full w-56 -translate-x-1/2 rounded-b-2xl border border-black/10 bg-white py-3 shadow-xl shadow-sahm-purple/15 transition duration-200 ${
                     dropdownOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
                   }`}
                 >
+                  <Link
+                    href={link.href}
+                    className="block px-5 py-2.5 font-heading text-sm font-extrabold uppercase tracking-wide text-slate-700 transition hover:bg-sahm-yellow/20 hover:text-sahm-purple"
+                  >
+                    Ver todos
+                  </Link>
                   {subcategories.map(sub => (
                     <Link
                       key={sub.href}
@@ -138,13 +168,13 @@ export default function SahmNav() {
 
       {/* Mobile full-screen menu — always in DOM, toggled via translate */}
       <div
-        inert={menuOpen ? undefined : ''}
+        inert={!menuOpen}
         className={`fixed inset-0 z-50 flex flex-col bg-sahm-purple px-6 py-6 lg:hidden
           transform transition-transform duration-300 ease-out
           ${menuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'}`}
       >
         <div className="flex items-center justify-between">
-          <img src="/images/Logos/SAHM_Blanco_SAHM.svg" alt="SAHM" className="h-9 w-auto object-contain" />
+          <Image src="/images/Logos/SAHM_Blanco_SAHM.svg" alt="SAHM" width={132} height={36} className="h-9 w-auto object-contain" style={{ width: 'auto' }} />
           <button
             type="button"
             onClick={() => setMenuOpen(false)}

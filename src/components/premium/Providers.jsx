@@ -5,10 +5,9 @@ import { usePathname } from 'next/navigation'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useGSAP } from '@gsap/react'
 import { CartProvider } from '../../context/CartContext'
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Providers({ children }) {
   const scope = useRef(null)
@@ -48,27 +47,38 @@ export default function Providers({ children }) {
     })
   }, [pathname])
 
-  useGSAP(() => {
+  useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    gsap.utils.toArray('.gsap-reveal').forEach(element => {
-      gsap.fromTo(element,
-        { autoAlpha: 0, y: 24 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 88%',
-          },
-        },
-      )
-    })
+    let frame = 0
+    const context = gsap.context(() => {
+      frame = requestAnimationFrame(() => {
+        gsap.utils.toArray('.gsap-reveal').forEach(element => {
+          gsap.fromTo(element,
+            { autoAlpha: 0, y: 24 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.7,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: element,
+                start: 'top 88%',
+              },
+            },
+          )
+        })
 
-    ScrollTrigger.refresh()
-  }, { scope, dependencies: [pathname] })
+        ScrollTrigger.refresh()
+      })
+    }, scope)
+
+    return () => {
+      cancelAnimationFrame(frame)
+      context.revert()
+      ScrollTrigger.refresh()
+    }
+  }, [pathname])
 
   return (
     <CartProvider>

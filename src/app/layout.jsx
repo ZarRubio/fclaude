@@ -17,13 +17,45 @@ const inter = Inter({
   display: 'swap',
 })
 
+const siteUrl = 'https://sahmparts.com'
+const siteTitle = 'SAHM PARTS | Repuestos para motos en Perú'
+const siteDescription = 'Llantas, cámaras, carburadores y repuestos para motos. Stock real, asesoría directa y despachos a todo el Perú.'
+
 export const metadata = {
-  metadataBase: new URL('https://www.sahmparts.com'),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: 'SAHM | Repuestos para moto',
-    template: '%s | SAHM',
+    default: siteTitle,
+    template: '%s | SAHM PARTS',
   },
-  description: 'Llantas, cámaras y repuestos para moto. Stock real, precios claros y despacho nacional.',
+  description: siteDescription,
+  applicationName: 'SAHM PARTS',
+  keywords: [
+    'repuestos para motos',
+    'llantas para motos',
+    'cámaras para motos',
+    'carburadores para motos',
+    'SAHM Parts',
+    'motos Perú',
+  ],
+  authors: [{ name: 'SAHM PARTS' }],
+  creator: 'SAHM PARTS',
+  publisher: 'SAHM PARTS',
+  alternates: {
+    canonical: './',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  category: 'ecommerce',
+  manifest: '/site.webmanifest',
   icons: {
     icon: [
       { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
@@ -33,25 +65,31 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'SAHM | Repuestos para moto',
-    description: 'Catálogo de llantas, cámaras y repuestos para motocicletas.',
-    url: 'https://www.sahmparts.com',
-    siteName: 'SAHM',
-    type: 'website',
+    title: siteTitle,
+    description: 'Catálogo de llantas, cámaras, carburadores y repuestos para motocicletas. Stock real, asesoría directa y despacho nacional.',
+    url: siteUrl,
+    siteName: 'SAHM PARTS',
     images: [
       {
-        url: '/images/og-sahm.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'SAHM - Llantas, cámaras y repuestos para moto',
+        alt: 'SAHM PARTS',
       },
     ],
+    locale: 'es_PE',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SAHM | Repuestos para moto',
-    description: 'Catálogo de llantas, cámaras y repuestos para motocicletas.',
-    images: ['/images/og-sahm.png'],
+    title: siteTitle,
+    description: 'Catálogo de llantas, cámaras, carburadores y repuestos para motocicletas. Stock real y despacho nacional.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        alt: 'SAHM PARTS',
+      },
+    ],
   },
 }
 

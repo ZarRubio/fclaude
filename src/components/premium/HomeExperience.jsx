@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import StatsTrustPanel from './StatsTrustPanel'
 import HeroSection from './HeroSection'
 import BestSellersCarousel from './BestSellersCarousel'
@@ -18,6 +21,14 @@ function StarRating() {
 }
 
 export default function HomeExperience() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const revealClass = className => (mounted ? `gsap-reveal ${className}` : className)
+
   return (
     <>
       {/* ── 3D Hero ── */}
@@ -33,7 +44,7 @@ export default function HomeExperience() {
       {/* ── Category grid ── */}
       <section className="bg-sahm-cream px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="gsap-reveal mb-8">
+          <div className={revealClass('mb-8')}>
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Líneas de producto</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Encuentra lo que necesitas.</h2>
           </div>
@@ -44,7 +55,7 @@ export default function HomeExperience() {
       {/* ── Best sellers ── */}
       <section className="bg-sahm-cream px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="gsap-reveal mb-8">
+          <div className={revealClass('mb-8')}>
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Más vendidos</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Referencias listas para salir.</h2>
           </div>
@@ -56,7 +67,7 @@ export default function HomeExperience() {
       <section className="bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-            <div className="gsap-reveal">
+            <div className={revealClass('')}>
               <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-yellow">Asesoría directa</span>
               <h2 className="mt-3 font-heading text-4xl font-extrabold uppercase italic leading-tight text-white sm:text-5xl">
                 ¿No encuentras tu pieza?
@@ -73,7 +84,7 @@ export default function HomeExperience() {
                 Consultar por WhatsApp
               </a>
             </div>
-            <div className="gsap-reveal rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className={revealClass('rounded-2xl border border-white/10 bg-white/5 p-6')}>
               {catalogHighlights.map(item => (
                 <p key={item} className="flex items-center gap-3 border-b border-white/10 py-3 text-sm font-bold text-white/70 last:border-0">
                   <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-sahm-yellow" />
@@ -88,11 +99,11 @@ export default function HomeExperience() {
       {/* ── Testimonials ── */}
       <section className="bg-sahm-cream px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="gsap-reveal mb-8 text-center">
+          <div className={revealClass('mb-8 text-center')}>
             <span className="text-xs font-heading font-bold uppercase tracking-widest text-sahm-purple">Clientes</span>
             <h2 className="mt-2 font-heading text-4xl font-extrabold uppercase italic text-black">Lo que dicen.</h2>
           </div>
-          <div className="gsap-reveal grid gap-4 md:grid-cols-3">
+          <div className={revealClass('grid gap-4 md:grid-cols-3')}>
             {testimonials.map(item => (
               <article key={item.name} className="rounded-2xl border-2 border-gray-100 bg-white p-6 shadow-sm">
                 <StarRating />

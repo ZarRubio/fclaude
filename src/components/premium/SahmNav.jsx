@@ -169,7 +169,7 @@ export default function SahmNav() {
       {/* Mobile full-screen menu — always in DOM, toggled via translate */}
       <div
         inert={!menuOpen}
-        className={`fixed inset-0 z-50 flex flex-col bg-sahm-purple px-6 py-6 lg:hidden
+        className={`fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black px-6 py-6 lg:hidden
           transform transition-transform duration-300 ease-out
           ${menuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'}`}
       >

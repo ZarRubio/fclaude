@@ -1,19 +1,19 @@
 import { Fragment } from 'react'
 
 const trustItems = [
+  { Icon: TruckIcon, text: 'Envíos a todo el Perú' },
   { Icon: UsersIcon, text: '1,200+ clientes atendidos' },
   { Icon: CardIcon, text: 'Yape y Plin aceptados' },
-  { Icon: WrenchIcon, text: 'Talleres y flotas' },
-  { Icon: ClockIcon, text: 'Respuesta en 8 minutos' },
-  { Icon: CheckCircleIcon, text: 'Stock confirmado antes del pago' },
-  { Icon: TruckIcon, text: 'Envíos a todo el Perú' },
+  { Icon: ClockIcon, text: 'Respuesta rápida' },
+  { Icon: WrenchIcon, text: 'Especialistas en motos' },
+  { Icon: CheckCircleIcon, text: 'Repuestos para motos' },
 ]
 
 export default function TrustBar() {
   const looped = [...trustItems, ...trustItems, ...trustItems]
 
   return (
-    <section className="overflow-hidden border-y border-sahm-yellow/45 bg-sahm-night py-2.5 shadow-inner" aria-label="Beneficios SAHM">
+    <section className="overflow-hidden border-y border-sahm-yellow/45 bg-gradient-to-r from-sahm-purple via-sahm-night to-black py-2.5 shadow-inner" aria-label="Beneficios SAHM">
       <div className="flex overflow-hidden">
         <div className="flex w-max shrink-0 animate-marquee items-center">
           {looped.map((item, index) => (
@@ -91,4 +91,3 @@ function ClockIcon() {
     </svg>
   )
 }
-

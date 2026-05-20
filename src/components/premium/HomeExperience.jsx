@@ -21,11 +21,13 @@ export default function HomeExperience() {
   return (
     <>
       {/* ── 3D Hero ── */}
-      <HeroSection />
+      <section className="relative z-10 overflow-hidden bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black">
+        <HeroSection />
 
       {/* ── Stats trust panel (below hero, same purple bg) ── */}
-      <section className="relative z-10 bg-sahm-purple px-4 pb-16 sm:px-6">
+      <div className="relative z-10 px-4 pb-16 sm:px-6">
         <StatsTrustPanel />
+      </div>
       </section>
 
       {/* ── Category grid ── */}
@@ -51,7 +53,7 @@ export default function HomeExperience() {
       </section>
 
       {/* ── WhatsApp CTA ── */}
-      <section className="bg-sahm-night px-4 py-16 sm:px-6">
+      <section className="bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div className="gsap-reveal">

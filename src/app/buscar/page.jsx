@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SearchPage() {
   return (
-    <main className="min-h-screen bg-sahm-night px-4 pb-24 pt-8 sm:px-6">
+    <main className="min-h-screen bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black px-4 pb-24 pt-8 sm:px-6">
       <div className="mx-auto max-w-7xl">
         <SearchCatalogClient />
       </div>

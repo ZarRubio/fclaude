@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { getProductLabel } from '../../config/catalog'
 
 const PAGE_SIZE = 4
-const MOBILE_PAGE_SIZE = 2
+const MOBILE_PAGE_SIZE = 1
 
 export default function BestSellersCarousel({ products }) {
   const pages = useMemo(() => {
@@ -92,12 +92,12 @@ export default function BestSellersCarousel({ products }) {
             </>
           )}
 
-          <div key={mobilePage} className="grid animate-fade-in grid-cols-2 gap-2">
+          <div key={mobilePage} className="mx-auto grid max-w-[320px] animate-fade-in grid-cols-1">
             {activeMobileProducts.map((product, index) => (
               <FeaturedProduct
                 key={product.id}
                 product={product}
-                priority={mobilePage === 0 && index < 2}
+                priority={mobilePage === 0 && index === 0}
                 compact
               />
             ))}
@@ -157,32 +157,32 @@ function FeaturedProduct({ product, priority, compact = false }) {
 
   return (
     <Link href={product.productUrl} className="group block">
-      <article className={`overflow-hidden border-2 border-white bg-white shadow-sm transition hover:-translate-y-1 hover:border-sahm-yellow hover:shadow-xl hover:shadow-sahm-purple/10 ${compact ? 'rounded-lg' : 'rounded-2xl'}`}>
-        <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-white">
-          <span className={`absolute z-10 rounded-full bg-sahm-purple font-heading font-extrabold uppercase tracking-widest text-sahm-yellow shadow-md ${compact ? 'left-2 top-2 px-2 py-0.5 text-[9px]' : 'left-4 top-4 px-3 py-1 text-[10px]'}`}>
+      <article className={`overflow-hidden border-2 border-white bg-white shadow-sm transition hover:-translate-y-1 hover:border-sahm-yellow hover:shadow-xl hover:shadow-sahm-purple/10 ${compact ? 'rounded-xl' : 'rounded-2xl'}`}>
+        <div className={`relative flex items-center justify-center overflow-hidden bg-white ${compact ? 'aspect-[5/4]' : 'aspect-[4/5]'}`}>
+          <span className={`absolute z-10 rounded-full bg-sahm-purple font-heading font-extrabold uppercase tracking-widest text-sahm-yellow shadow-md ${compact ? 'left-4 top-4 px-3 py-1 text-[10px]' : 'left-4 top-4 px-3 py-1 text-[10px]'}`}>
             {product.category}
           </span>
           <Image
             src={product.images[0].detail || product.images[0].card}
             alt={label}
             fill
-            sizes={compact ? '50vw' : '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw'}
+            sizes={compact ? '90vw' : '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw'}
             priority={priority}
-            className={`object-contain transition duration-500 group-hover:scale-105 ${compact ? 'p-3' : 'p-6'}`}
+            className={`object-contain transition duration-500 group-hover:scale-105 ${compact ? 'p-6' : 'p-6'}`}
           />
-          <span className={`absolute inset-x-0 bottom-0 bg-sahm-yellow px-3 text-center font-heading font-extrabold uppercase tracking-wide text-sahm-purple transition duration-300 ${compact ? 'py-2 text-[10px]' : 'translate-y-full py-3 text-xs group-hover:translate-y-0'}`}>
+          <span className={`absolute inset-x-0 bottom-0 bg-sahm-yellow px-3 text-center font-heading font-extrabold uppercase tracking-wide text-sahm-purple transition duration-300 ${compact ? 'py-3 text-xs' : 'translate-y-full py-3 text-xs group-hover:translate-y-0'}`}>
             Ver producto
           </span>
         </div>
       </article>
-      <div className={`${compact ? 'px-1 pb-1 pt-2' : 'px-2 pb-2 pt-3'} text-center`}>
-        <p className={`font-heading font-extrabold uppercase tracking-widest text-sahm-yellow [text-shadow:0_1px_0_rgba(61,39,133,0.35)] ${compact ? 'text-[10px]' : 'text-xs'}`}>
+      <div className={`${compact ? 'px-2 pb-1 pt-3' : 'px-2 pb-2 pt-3'} text-center`}>
+        <p className={`font-heading font-extrabold uppercase tracking-widest text-sahm-yellow [text-shadow:0_1px_0_rgba(61,39,133,0.35)] ${compact ? 'text-xs' : 'text-xs'}`}>
           {product.category}
         </p>
-        <h3 className={`mt-1 font-heading font-extrabold uppercase leading-none text-sahm-purple ${compact ? 'text-base' : 'text-xl'}`}>
+        <h3 className={`mt-1 font-heading font-extrabold uppercase leading-none text-sahm-purple ${compact ? 'text-2xl' : 'text-xl'}`}>
           {product.code}
         </h3>
-        <p className={`mt-1 font-bold uppercase tracking-wide text-slate-500 ${compact ? 'text-[10px]' : 'text-xs'}`}>
+        <p className={`mt-1 font-bold uppercase tracking-wide text-slate-500 ${compact ? 'text-xs' : 'text-xs'}`}>
           {product.subcategory}
         </p>
       </div>

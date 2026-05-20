@@ -22,11 +22,11 @@ function CategoryPanel({ category, featured = false }) {
   return (
     <Link
       href={category.href}
-      className={`group relative isolate block overflow-hidden rounded-2xl bg-sahm-purple shadow-xl shadow-sahm-purple/10 ${
+      className={`group relative isolate block overflow-hidden rounded-2xl bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black shadow-xl shadow-sahm-purple/10 ${
         featured ? 'min-h-[420px] lg:min-h-[560px]' : 'min-h-[260px]'
       }`}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-sahm-purple via-sahm-purple/95 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(245,192,0,0.22),transparent_36%)]" />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/55 to-transparent" />
 
@@ -44,7 +44,7 @@ function CategoryPanel({ category, featured = false }) {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-r from-sahm-purple via-sahm-purple/65 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-sahm-purple via-sahm-night/65 to-transparent" />
 
       <div className={`relative z-10 flex h-full flex-col justify-end p-6 ${featured ? 'sm:p-9' : ''}`}>
         <span className="mb-3 w-fit rounded-full border border-sahm-yellow/50 bg-sahm-yellow px-3 py-1 font-heading text-[10px] font-extrabold uppercase tracking-widest text-sahm-purple">

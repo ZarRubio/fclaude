@@ -166,7 +166,7 @@ export default function HeroSection() {
         .carousel-img-enter { animation: slide-in 0.32s ease-out both; }
       `}</style>
 
-      <section className="relative overflow-hidden bg-sahm-purple px-4 py-16 sm:px-6 lg:pb-20 lg:pt-28">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 lg:pb-20 lg:pt-28">
         {/* bg glows */}
         <GlowOrb className="h-96 w-96 bg-sahm-yellow/20 -top-24 -left-32" />
         <GlowOrb className="h-80 w-80 bg-purple-500/20 bottom-0 right-0" />

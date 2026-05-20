@@ -35,7 +35,7 @@ export default async function CategoryPage({ params }) {
     <main className="min-h-screen bg-sahm-cream">
 
       {/* ── Mini hero banner ── */}
-      <div className="relative overflow-hidden bg-sahm-purple px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative overflow-hidden bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black px-4 py-10 sm:px-6 sm:py-14">
         {/* Subtle cover image as background */}
         {coverImage && (
           <div
@@ -51,7 +51,7 @@ export default async function CategoryPage({ params }) {
         )}
 
         {/* Gradient fade on right so image doesn't clash with text */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-sahm-purple to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-sahm-night via-sahm-purple/75 to-transparent" />
 
         <div className="relative mx-auto max-w-7xl">
           {/* breadcrumb */}

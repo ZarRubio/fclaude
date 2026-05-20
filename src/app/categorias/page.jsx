@@ -14,7 +14,7 @@ export default function CategoriesPage() {
 
   return (
     <main className="min-h-screen bg-sahm-cream">
-      <div className="relative overflow-hidden bg-sahm-purple px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative overflow-hidden bg-gradient-to-br from-sahm-purple via-sahm-night/95 to-black px-4 py-10 sm:px-6 sm:py-14">
         {heroImages.length > 0 && (
           <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 opacity-[0.07] sm:block">
             {heroImages.slice(0, 3).map((image, index) => (
@@ -31,7 +31,7 @@ export default function CategoriesPage() {
           </div>
         )}
 
-        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-2/3 bg-gradient-to-l from-sahm-purple via-sahm-purple/90 to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-2/3 bg-gradient-to-l from-sahm-night via-sahm-purple/80 to-transparent" />
 
         <div className="relative mx-auto max-w-7xl">
           <nav className="mb-4 flex items-center gap-2 text-sm text-white/50">

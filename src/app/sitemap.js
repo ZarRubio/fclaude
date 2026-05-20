@@ -3,6 +3,8 @@ import { CATALOG_PRODUCTS } from '../config/catalog'
 
 const siteUrl = 'https://sahmparts.com'
 
+export const dynamic = 'force-static'
+
 export default function sitemap() {
   const staticRoutes = ['', '/productos', '/categorias', '/buscar', '/carrito', '/nosotros', '/contacto']
   const categoryRoutes = CATEGORIES.filter(category => category.enabled).map(category => `/categorias/${category.id}`)
